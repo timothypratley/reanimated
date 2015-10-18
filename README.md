@@ -2,6 +2,8 @@
 
 An animation library for Reagent (ClojureScript)
 
+<img src="https://raw.githubusercontent.com/timothypratley/reanimated/master/resources/public/img/monster_zombie_hand-512.png"
+ alt="Zombie hand" title="Zombie hand" align="right" />
 
 ## Overview
 
