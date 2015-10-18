@@ -61,7 +61,7 @@ See examples in core.cljs
 ## Development
 
     lein figwheel
-    open [localhost:3449](http://localhost:3449/)
+    open http://localhost:3449
 
 To clean all compiled files:
 
