@@ -21,7 +21,7 @@
         :url "https://github.com/timothypratley/reanimated"}
 
   :cljsbuild
-  {:builds {:dev {:source-paths ["example_src" "src"]
+  {:builds {:dev {:source-paths ["site/src" "src"]
                   :figwheel {:on-jsload "timothypratley.reanimated.example/on-js-reload"
                              :devcards true}
                   :compiler {:main timothypratley.reanimated.example
@@ -30,8 +30,8 @@
                              :output-dir "example-resources/public/js/compiled/out"
                              :optimizations :none
                              :source-map-timestamp true }}
-            :website {:source-paths ["example_src" "src"]
-                      :compiler {:output-to "example-resources/public/js/compiled/reanimated.js"
+            :website {:source-paths ["site/src" "src"]
+                      :compiler {:output-to "site/reanimated.js"
                                  :main timothypratley.reanimated.example
                                  :optimizations :advanced}}}}
 
