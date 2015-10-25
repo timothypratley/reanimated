@@ -9,5 +9,8 @@ pom.xml
 .lein-deps-sum
 .lein-repl-history
 .lein-plugins/
+.lein*
 .repl
 .nrepl-port
+.idea
+*.iml
