@@ -31,8 +31,12 @@
                              :optimizations :none
                              :source-map-timestamp true }}
             :website {:source-paths ["site/src" "src"]
-                      :compiler {:output-to "site/reanimated.js"
-                                 :main timothypratley.reanimated.example
+                      :compiler {:main timothypratley.reanimated.example
+                                 :asset-path "site/out"
+                                 :output-to "site/reanimated.js"
+                                 :output-dir "site/out"
+                                 :devcards true
+                                 :recompile-dependents true
                                  :optimizations :advanced}}}}
 
   :figwheel {:css-dirs ["resources/public/css"]
