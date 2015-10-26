@@ -1,8 +1,9 @@
 (ns timothypratley.reanimated.core
   "An animation library for Reagent (ClojureScript)."
+  (:require-macros
+   [reagent.ratom :as ratom])
   (:require
    [reagent.core :as reagent]
-   [reagent.ratom :as ratom]
    [goog.events :as events]
    [goog.events.EventType :as EventType]
    [goog.dom :as dom]))
