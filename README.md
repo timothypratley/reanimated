@@ -2,7 +2,7 @@
 
 An animation library for Reagent (ClojureScript)
 
-<img src="https://raw.githubusercontent.com/timothypratley/reanimated/master/resources/public/img/monster_zombie_hand-512.png"
+<img src="https://timothypratley.github.io/reanimated/site/monster_zombie_hand-512.png"
  alt="Zombie hand" title="Zombie hand" align="right" />
 
 ## Overview
@@ -16,6 +16,10 @@ React style UIs have many advantages, but it is not always clear how to animate 
 Existing animation libraries focus on manipulating DOM elements,
 which conflicts with the lifecycle that React imposes on them.
 Reanimated avoids this problem by making animation part of your UI definition.
+
+## Examples
+
+http://timothypratley.github.io/reanimated/
 
 
 ## Setup

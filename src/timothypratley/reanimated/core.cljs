@@ -1,24 +1,11 @@
 (ns timothypratley.reanimated.core
   "An animation library for Reagent (ClojureScript)."
   (:require
-   [cljs.test :as t :include-macros true :refer-macros [testing is]]
-   [clojure.string :as string]
-   [devcards.core :as dc :refer-macros [defcard defcard-rg deftest]]
    [reagent.core :as reagent]
    [reagent.ratom :as ratom]
    [goog.events :as events]
    [goog.events.EventType :as EventType]
    [goog.dom :as dom]))
-
-;; TODO
-;;(foo)
-
-(defcard-rg about
-  "# Reanmiated
-   * Reactive value interpolation.
-   * Local time state, not part of your model.
-   * Only calculates while animating."
-  [:img {:src "img/monster_zombie_hand-512.png"}])
 
 (defn now []
   (js/Date.))
@@ -30,11 +17,6 @@
     (<= t 0) a
     (>= t duration) b
     :else (+ a (/ (* t (- b a)) duration))))
-
-(deftest interpolate-test
-  (is (= 1 (interpolate 1 2 100 -10)))
-  (is (= 2 (interpolate 1 2 100 110)))
-  (is (= 1.5 (interpolate 1 2 100 50))))
 
 ;; TODO: interpolate between vectors
 ;; TODO: curve interpolation
@@ -69,17 +51,6 @@
     (swap! r not)
     e))
 
-(defcard-rg pop-when-example
-  (fn a-pop-when-example [show? _]
-    [:div
-     [:button {:on-click (toggle-handler show?)} "Pop!"]
-     [pop-when @show?
-      [:div
-       {:style {:background-color "yellow"}}
-       [:p "Here is a circle."]
-       [:svg [:circle {:r 50 :cx 50 :cy 50 :fill "green"}]]]]])
-  (reagent/atom true))
-
 ;; TODO: pop-cond, animate between many elements. pop-case pop-if
 ;; TODO: can pop-when be written in terms of interpolate-if
 
@@ -106,17 +77,6 @@
             (+ (* a (- 1 scale)) (* b scale)))
           (if @condition b a)))))))
 
-(defn interpolate-if-example []
-  (let [selected? (reagent/atom false)
-        radius (interpolate-if selected? 40 20)]
-    (fn an-interpolate-if-example []
-      [:div
-       [:button {:on-click (toggle-handler selected?)} "Pop!"]
-       [:svg [:circle {:r @radius :cx 40 :cy 40 :fill "blue"}]]])))
-
-(defcard-rg interpolate-if-card
-  [interpolate-if-example])
-
 (defn interpolate-arg
   "Interpolates the argument of a component to x."
   ([component x] (interpolate-arg component x {}))
@@ -136,19 +96,6 @@
                (swap! anim assoc :current i)
                [component i]))
            [component x]))))))
-
-(defn circle [radius]
-  [:svg [:circle {:r radius :cx 40 :cy 40 :fill "red"}]])
-
-(defn interpolate-arg-example []
-  (let [selected? (reagent/atom false)]
-    (fn an-interpolate-arg-example []
-      [:div
-       [:button {:on-click (toggle-handler selected?)} "Pop!"]
-       [interpolate-arg circle (if @selected? 40 20)]])))
-
-(defcard-rg interpolate-arg-card
-  [interpolate-arg-example])
 
 ;; TODO: why does passing options as second argument not work?
 ;; it would look more reagenty [pop-when {:duration 1000} condition then]
@@ -176,22 +123,6 @@
         dv (/ (+ aa (* 2.0 (+ ba ca)) da) 6.0)]
     [(+ x (* dx dt)) (+ v (* dv dt))]))
 
-(defcard-rg integrate-rk4-card
-  [:svg
-   [:path
-    {:stroke "blue"
-     :fill "none"
-     :d (str
-         "M0 0"
-         (string/join
-          " "
-          (->> [0 0]
-               (iterate (fn [[v a]] (integrate-rk4 50 1 v a)))
-               (take 100)
-               (map first)
-               (map vector (range))
-               (map (fn [[t x]] (str "L" t " " x))))))}]])
-
 (defn small [x]
   (< (js/Math.abs x) 0.1))
 
@@ -217,18 +148,6 @@
                                           :x x
                                           :v v}))
             x)))))))
-
-(defn spring-x-example []
-  (let [x (reagent/atom 150)
-        cx (spring-x x)]
-    (fn a-spring-x-example []
-      [:div
-       [:button {:on-click (fn [e] (swap! x - 50))} "<"]
-       [:button {:on-click (fn [e] (swap! x + 50))} ">"]
-       [:svg [:circle {:r 20 :cx @cx :cy 50 :fill "green"}]]])))
-
-(defcard-rg spring-x-card
-  [spring-x-example])
 
 (defn watch
   "Watch a ref only while mounted in the DOM."
@@ -259,23 +178,6 @@
         (js/clearInterval @id))
       :reagent-render
       (fn interval-render [])})))
-
-(defn timeline-example []
-  (let [script ["Once upon a time"
-                "in a land far away"
-                "interfaces were static and boring"
-                "until one day"
-                "springs were attached to everything"
-                "and through the power of animation"
-                "the intefaces came alive"]
-        lines (reagent/atom (cycle script))]
-    (fn a-timeline-example []
-      [:div
-       [interval #(swap! lines rest) 2000]
-       [:p (first @lines)]])))
-
-(defcard-rg timeline-card
-  [timeline-example])
 
 (defn timeout
   "Call function f after period t if still mounted in the DOM."
