@@ -16,7 +16,7 @@
    * Local time state, not part of your model.
    * Only calculates while animating.
    https://github.com/timothypratley/reanimated"
-  [:img {:src "monster_zombie_hand-512.png"}])
+  [:img {:src "site/monster_zombie_hand-512.png"}])
 
 (defcard-rg pop-when-example
   (fn a-pop-when-example [show? _]
