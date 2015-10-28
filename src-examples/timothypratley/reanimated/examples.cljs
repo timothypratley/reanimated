@@ -8,15 +8,63 @@
 
 (enable-console-print!)
 
-(defn on-js-reload [])
+;; TODO: fade in
+
+(defn logo []
+  (let [tilt (reagent/atom 0)
+        rotation (anim/spring tilt)
+        flip (reagent/atom 90)
+        scale (anim/spring flip)
+        size (reagent/atom 0)
+        width (anim/spring size)]
+    (fn a-logo []
+      [:div
+       [anim/timeout #(reset! size 300) 1000]
+       [anim/interval #(swap! flip -) 10000]
+       [:img
+        {:src "img/monster_zombie_hand-512.png"
+         :width (str @width "px")
+         :style (zipmap [:-ms-transform
+                         :-moz-transform
+                         :-webkit-transform
+                         :transform]
+                        (repeat (str "rotate(" @rotation "deg) rotateY(" (+ 90 @scale) "deg)")))
+         :on-mouse-over (fn logo-mouseover [e]
+                          (reset! tilt 15))
+         :on-mouse-out (fn logo-mouseout [e]
+                         (reset! tilt 0))}]])))
 
 (defcard-rg about
-  "# Reanmiated
-   * Reactive value interpolation.
+  "# [Reanimated](https://github.com/timothypratley/reanimated)
+   * Reactive animation.
    * Local time state, not part of your model.
-   * Only calculates while animating.
-   * https://github.com/timothypratley/reanimated"
-  [:img {:src "site/monster_zombie_hand-512.png"}])
+   * Calculates only while animating."
+  [logo])
+
+(defn spring-example-component []
+  (let [x (reagent/atom 100)
+        s (anim/spring x)]
+    (fn []
+      [:img
+       {:width @s
+        :src "img/monster_zombie_hand-512.png"
+        :on-click (fn [e]
+                    (swap! x + 10))}])))
+
+(defcard-rg spring-example
+  "Springs follow the value of a Reagent atom, with a transition.
+```Clojure
+(defn spring-example-component []
+  (let [x (reagent/atom 100)
+        s (anim/spring x)]
+    (fn []
+      [:img
+       {:width @s
+        :src \"img/monster_zombie_hand-512.png\"
+        :on-click (fn [e]
+                    (swap! x + 10))}])))
+```"
+  [spring-example-component])
 
 (defcard-rg pop-when-example
   (fn a-pop-when-example [show? _]
@@ -69,17 +117,17 @@
                (map vector (range))
                (map (fn [[t x]] (str "L" t " " x))))))}]])
 
-(defn spring-x-example []
+(defn spring-example []
   (let [x (reagent/atom 150)
-        cx (anim/spring-x x)]
-    (fn a-spring-x-example []
+        cx (anim/spring x)]
+    (fn a-spring-example []
       [:div
        [:button {:on-click (fn [e] (swap! x - 50))} "<"]
        [:button {:on-click (fn [e] (swap! x + 50))} ">"]
        [:svg [:circle {:r 20 :cx @cx :cy 50 :fill "green"}]]])))
 
-(defcard-rg spring-x-card
-  [spring-x-example])
+(defcard-rg spring-card
+  [spring-example])
 
 (defn timeline-example []
   (let [script ["Once upon a time"
@@ -104,3 +152,5 @@
   (is (= 1.5 (anim/interpolate 1 2 100 50))))
 
 (dc/start-devcard-ui!)
+
+(defn on-js-reload [])

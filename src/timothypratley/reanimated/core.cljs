@@ -19,9 +19,6 @@
     (>= t duration) b
     :else (+ a (/ (* t (- b a)) duration))))
 
-;; TODO: interpolate between vectors
-;; TODO: curve interpolation
-
 (defn pop-when
   "Wraps a component to animate creation and destruction"
   ([condition then] (pop-when condition then {}))
@@ -101,25 +98,25 @@
 ;; TODO: why does passing options as second argument not work?
 ;; it would look more reagenty [pop-when {:duration 1000} condition then]
 
-(def m 10)
-(def k 1)
-(def b 1)
+(def mass 10)
+(def stiffness 1)
+(def damping 1)
 
 (defn evaluate
-  [x x2 dt v a]
+  [x2 dt x v a]
   (let [x (+ x (* v dt))
         v (+ v (* a dt))
-        f (- (* k (- x2 x)) (* b v))
-        a (/ f m)]
+        f (- (* stiffness (- x2 x)) (* damping v))
+        a (/ f mass)]
     [v a]))
 
 (defn integrate-rk4
   [x2 dt x v]
   (let [dt2 (* dt 0.5)
-        [av aa] (evaluate x x2 0.0 v 0.0)
-        [bv ba] (evaluate x x2 dt2 av aa)
-        [cv ca] (evaluate x x2 dt2 bv ba)
-        [dv da] (evaluate x x2 dt cv ca)
+        [av aa] (evaluate x2 0.0 x v 0.0)
+        [bv ba] (evaluate x2 dt2 x av aa)
+        [cv ca] (evaluate x2 dt2 x bv ba)
+        [dv da] (evaluate x2 dt x cv ca)
         dx (/ (+ av (* 2.0 (+ bv cv)) dv) 6.0)
         dv (/ (+ aa (* 2.0 (+ ba ca)) da) 6.0)]
     [(+ x (* dx dt)) (+ v (* dv dt))]))
@@ -127,13 +124,16 @@
 (defn small [x]
   (< (js/Math.abs x) 0.1))
 
-(defn spring-x
+(defn spring
   "Interpolates the argument of a component to x."
-  ([x2] (spring-x x2 {}))
+  ([x2] (spring x2 {}))
   ([x2 options]
    (let [{:keys [from velocity]
           :or {from @x2
-               velocity 0}} options
+               velocity 0
+               mass 10
+               stiffness 1
+               damping 1}} options
          anim (reagent/atom {:t (now)
                              :x from
                              :v velocity})]

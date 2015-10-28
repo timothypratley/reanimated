@@ -5,8 +5,8 @@ pom.xml.asc
 *jar
 /lib/
 /classes/
-/out/
 /target/
+/js/compiled
 .lein-deps-sum
 .lein-repl-history
 .lein-plugins/

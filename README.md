@@ -2,31 +2,37 @@
 
 An animation library for Reagent (ClojureScript)
 
-<img src="https://timothypratley.github.io/reanimated/site/monster_zombie_hand-512.png"
- alt="Zombie hand" title="Zombie hand" align="right" />
+<img src="https://timothypratley.github.io/reanimated/img/monster_zombie_hand-512.png"
+ alt="Reanimated" title="Reanimated" align="right" />
+
 
 ## Overview
 
+You know how to write HTML.
+Reanimated allows you to express value transitions in your HTML.
+
+* Concise expressions.
+* Springs.
 * Reactive value interpolation.
 * Local time state, not part of your model.
-* Only calculates while animating.
-* Concise expressions.
+* Calculates only while animating.
 
 React style UIs have many advantages, but it is not always clear how to animate them.
 Existing animation libraries focus on manipulating DOM elements,
 which conflicts with the lifecycle that React imposes on them.
 Reanimated avoids this problem by making animation part of your UI definition.
 
+
 ## Examples
 
-http://timothypratley.github.io/reanimated/
+[Live demos](http://timothypratley.github.io/reanimated/#!/timothypratley.reanimated.examples)
 
 
 ## Setup
 
  Add to your project.clj file:
 
-    [timothypratley/reanimated "0.1.0-SNAPSHOT"]
+[![Clojars Project](http://clojars.org/timothypratley/reanimated/latest-version.svg)](http://clojars.org/timothypratley/reanimated)
 
 
 ## Usage
@@ -67,21 +73,31 @@ http://timothypratley.github.io/reanimated/
        [interpolate-arg circle (if @selected? 40 20)]])))
 ```
 
-See examples in core.cljs
+
+## How it works
+
+Reactions. You should read about them [here.](https://github.com/Day8/re-frame)
+Physical spring simulation.
+Animation atom which recalculates until it reaches a steady state.
 
 
 ## Development
 
+Pull requests are welcome.
+
+When working on src-examples:
+
     lein figwheel
-    open http://localhost:3449
+    open http://localhost:3449/dev.html
 
-To clean all compiled files:
-
-    lein clean
-
-To create a production build run:
+To compile the website (keep figwheel running):
 
     lein cljsbuild once min
+    open http://localhost:3449
+
+Merge to gh-pages to release the website.
+
+`lein release` to release the library.
 
 
 ## License

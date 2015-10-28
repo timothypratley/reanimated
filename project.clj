@@ -11,19 +11,23 @@
 
   :source-paths ["src"]
 
-  :clean-targets ^{:protect false} ["resources/public/js/compiled" :target-path]
+  :clean-targets ^{:protect false} ["public/js/compiled"
+                                    "resources-dev/public/js/compiled"
+                                    :target-path]
 
   :scm {:name "git"
         :url "https://github.com/timothypratley/reanimated"}
 
-  {:deploy-repositories [["releases" :clojars]]}
+  :deploy-repositories [["releases" :clojars]]
+
+  :signing {:gpg-key "timothypratley@gmail.com"}
 
   :profiles
   {:dev
    {:dependencies [[devcards "0.2.0-8"]]
     :plugins [[lein-cljsbuild "1.1.0"]
               [lein-figwheel "0.4.0"]]
-    :resource-paths ["resources" "example-resources"]
+    :resource-paths ["resources" "."]
     :cljsbuild
     {:builds
      {:dev
@@ -31,20 +35,21 @@
        :figwheel {:on-jsload "timothypratley.reanimated.examples/on-js-reload"
                   :devcards true}
        :compiler {:main timothypratley.reanimated.examples
-                  :asset-path "js/compiled/out"
-                  :output-to "example-resources/public/js/compiled/reanimated.js"
-                  :output-dir "example-resources/public/js/compiled/out"
+                  :asset-path "js/compiled/out-dev"
+                  :output-to "js/compiled/reanimated-dev.js"
+                  :output-dir "js/compiled/out-dev"
                   :optimizations :none
                   :source-map-timestamp true}}
       :website
       {:source-paths ["src" "src-examples"]
        :compiler {:main timothypratley.reanimated.examples
-                  :asset-path "site/out"
-                  :output-to "site/reanimated.js"
-                  :output-dir "site/out"
+                  :asset-path "js/compiled/out"
+                  :output-to "js/compiled/reanimated.js"
+                  :output-dir "js/compiled/out"
                   :devcards true
                   :recompile-dependents true
                   :optimizations :advanced}}}}}}
 
-  :figwheel {:css-dirs ["resources/public/css"]
+  :figwheel {:css-dirs ["public/css"]
+             :http-server-root "."
              :nrepl-port 7888})
