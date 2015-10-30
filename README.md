@@ -26,6 +26,7 @@ Reanimated avoids this problem by making animation part of your UI definition.
 ## Examples
 
 [Live demos](http://timothypratley.github.io/reanimated/#!/timothypratley.reanimated.examples)
+and [code](https://github.com/timothypratley/reanimated/blob/master/src-examples/timothypratley/reanimated/examples.cljs)
 
 
 ## Setup
@@ -33,45 +34,6 @@ Reanimated avoids this problem by making animation part of your UI definition.
  Add to your project.clj file:
 
 [![Clojars Project](http://clojars.org/timothypratley/reanimated/latest-version.svg)](http://clojars.org/timothypratley/reanimated)
-
-
-## Usage
-
-* Wrap components in `pop-when` to animate their creation/destruction.
-* Use `interpolate-if` to create a ratom that animates between two values.
-* Wrap a component with `interpolate-arg` and it will interpolate to the argument value.
-* To trigger events from ratoms, use `watch`.
-
-```Clojure
-(ns my-ns
-  (:require [timothypratley.reanimated :refer [pop-when interpolate-if interpolate-arg toggle-handler]]))
-
-(defn pop-when-example []
-  (let [show? (reagent/atom true)]
-    (fn a-pop-when-example []
-      [:div
-       [:button {:on-click (toggle-handler show?)} "Pop!"]
-       [pop-when @show?
-        [:div
-         {:style {:background-color "yellow"}}
-         [:p "Here is a circle."]
-         [:svg [:circle {:r 50 :cx 50 :cy 50 :fill "green"}]]]]])))
-
-(defn interpolate-if-example []
-  (let [selected? (reagent/atom false)
-        radius (interpolate-if selected? 40 20)]
-    (fn an-interpolate-if-example []
-      [:div
-       [:button {:on-click (toggle-handler selected?)} "Pop!"]
-       [:svg [:circle {:r @radius :cx 40 :cy 40 :fill "blue"}]]])))
-
-(defn interpolate-arg-example []
-  (let [selected? (reagent/atom false)]
-    (fn an-interpolate-arg-example []
-      [:div
-       [:button {:on-click (toggle-handler selected?)} "Pop!"]
-       [interpolate-arg circle (if @selected? 40 20)]])))
-```
 
 
 ## How it works
