@@ -8,8 +8,6 @@
 
 (enable-console-print!)
 
-;; TODO: fade in
-
 (defn logo []
   (let [tilt (reagent/atom 0)
         rotation (anim/spring tilt)

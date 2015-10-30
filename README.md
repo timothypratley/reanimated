@@ -26,7 +26,7 @@ Reanimated avoids this problem by making animation part of your UI definition.
 ## Examples
 
 [Live demos](http://timothypratley.github.io/reanimated/#!/timothypratley.reanimated.examples)
-and [code](https://github.com/timothypratley/reanimated/blob/master/src-examples/timothypratley/reanimated/examples.cljs)
+and [code.](https://github.com/timothypratley/reanimated/blob/master/src-examples/timothypratley/reanimated/examples.cljs)
 
 
 ## Setup
