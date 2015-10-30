@@ -20,7 +20,7 @@
 
   :deploy-repositories [["releases" :clojars]]
 
-  :signing {:gpg-key "timothypratley@gmail.com"}
+  :signing {:gpg-key "B2DEBCA2"}
 
   :profiles
   {:dev

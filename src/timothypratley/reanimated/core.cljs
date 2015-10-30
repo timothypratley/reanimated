@@ -75,6 +75,36 @@
             (+ (* a (- 1 scale)) (* b scale)))
           (if @condition b a)))))))
 
+(defn interpolate-to
+  "Interpolates toward new values."
+  ([x] (interpolate-to x {}))
+  ([x options]
+   (let [anim (reagent/atom {:from @x
+                             :at @x
+                             :to @x
+                             :start (now)})
+         {:keys [duration easing]
+          :or {duration 200
+               easing interpolate}} options]
+     (ratom/reaction
+      (when (not= (:to @anim) @x)
+        (swap! anim assoc
+               :start (now)
+               :to @x
+               :from (:at @anim)
+               :frame 0))
+      (let [t (->> @anim :start (- (now)))
+            scale (easing 0 1 duration t)
+            a (:from @anim)
+            b @x]
+        (if (< t duration)
+          (let [at (+ (* a (- 1 scale)) (* b scale))]
+            (js/setTimeout #(swap! anim assoc
+                                   :at at
+                                   :frame (inc (:frame @anim))))
+            at)
+          b))))))
+
 (defn interpolate-arg
   "Interpolates the argument of a component to x."
   ([component x] (interpolate-arg component x {}))
@@ -195,12 +225,20 @@
       :reagent-render
       (fn interval-render [])})))
 
-;;; TODO: wip
 (defn get-scroll []
-  (-> (dom/getDocumentScroll) (.-y)))
+  (.-y (dom/getDocumentScroll)))
 
-(defn watch-scroll-events [r]
-  (events/listen js/window EventType/SCROLL
-                 (fn a-scroll [e]
-                   (js/console.log "HELLO" e)
-                   (reset! r (get-scroll)))))
+(def scroll (reagent/atom (get-scroll)))
+
+(events/listen
+ js/window EventType/SCROLL
+ (fn a-scroll [e]
+   (reset! scroll (get-scroll))))
+
+#_(defn scroll
+  []
+  {:display-name "scroll"
+   :component-did-mount
+   (fn scroll-did-mount [this]
+     (.getDomNode this))
+   })

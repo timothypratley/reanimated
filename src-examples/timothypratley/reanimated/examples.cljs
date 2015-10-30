@@ -42,29 +42,55 @@
   [logo])
 
 (defn spring-example-component []
-  (let [x (reagent/atom 100)
-        s (anim/spring x)]
-    (fn []
+  (let [size (reagent/atom 100)
+        size-spring (anim/spring size)]
+    (fn a-spring-example-component []
       [:img
-       {:width @s
-        :src "img/monster_zombie_hand-512.png"
+       {:width @size-spring
+        :src "img/golem2-512.png"
         :on-click (fn [e]
-                    (swap! x + 10))}])))
+                    (swap! size + 10))}])))
 
 (defcard-rg spring-example
   "Springs follow the value of a Reagent atom, with a transition.
 ```Clojure
 (defn spring-example-component []
-  (let [x (reagent/atom 100)
-        s (anim/spring x)]
-    (fn []
+  (let [size (reagent/atom 100)
+        size-spring (anim/spring size)]
+    (fn a-spring-example-component []
       [:img
-       {:width @s
-        :src \"img/monster_zombie_hand-512.png\"
+       {:width @size-spring
+        :src \"img/golem2-512.png\"
         :on-click (fn [e]
-                    (swap! x + 10))}])))
-```"
+                    (swap! size + 10))}])))
+```
+Wrapping `size` with `anim/spring` returns a reaction `size-spring`,
+which produces animated values from the previous size to the current size.
+
+\"Click me!\""
   [spring-example-component])
+
+(defn scroll-example-component []
+  (let [scroll-i (anim/interpolate-to anim/scroll)]
+    (fn []
+      [:div
+       {:style {:background (str "linear-gradient(rgb(" (- 255 (quot @scroll-i 10)) ",127,127), darkred)")
+                }}
+       [:img
+        {:src "img/full-moon-icon-hi.png"
+         :style {
+                 :width "100"
+                 :position "absolute"
+                 :left (+ 500.0 (* 300.0 (js/Math.sin (+ (/ js/Math.PI 2.0) (/ @scroll-i 500.0)))))
+                 :top (+ 200.0 (* 200.0 (js/Math.cos (+ (/ js/Math.PI 2.0) (/ @scroll-i 500.0)))))}}]
+       [:img
+        {:src "img/house.png"
+         :style {:position "relative"
+                 :left "20%"
+                 :width (+ 500.0 (/ @scroll-i 10.0))}}]])))
+
+(defcard-rg scroll-example
+  [scroll-example-component])
 
 (defcard-rg pop-when-example
   (fn a-pop-when-example [show? _]
