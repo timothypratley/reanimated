@@ -1,4 +1,4 @@
-(defproject timothypratley/reanimated "0.1.2"
+(defproject timothypratley/reanimated "0.1.3-SNAPSHOT"
   :description "Reanimated is an animation library for Reagent (ClojureScript)."
   :url "http://github.com/timothypratley/reanimated"
   :license {:name "Eclipse Public License"
@@ -20,7 +20,7 @@
 
   :deploy-repositories [["releases" :clojars]]
 
-  :signing {:gpg-key "B2DEBCA2"}
+  :signing {:gpg-key "0A7E8B95"}
 
   :profiles
   {:dev
