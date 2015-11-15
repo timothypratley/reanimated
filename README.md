@@ -57,7 +57,7 @@ When working on src-examples navigate to dev.html:
 
 To compile the website (keep figwheel running):
 
-    lein cljsbuild once min
+    lein cljsbuild once website
     open http://localhost:3449
 
 Merge to gh-pages to release the website.
