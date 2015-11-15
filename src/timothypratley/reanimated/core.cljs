@@ -44,10 +44,18 @@
               then])
            (when condition then)))))))
 
-(defn toggle-handler [r]
+(defn toggle-handler [ratom]
   (fn a-toggle-handler [e]
-    (swap! r not)
+    (swap! ratom not)
     e))
+
+(defn mouse-watcher [ratom]
+  {:on-mouse-over (fn timeline-mouse-over [e]
+                    (reset! ratom true)
+                    e)
+   :on-mouse-out (fn timeline-mouse-out [e]
+                   (reset! ratom false)
+                   e)})
 
 ;; TODO: pop-cond, animate between many elements. pop-case pop-if
 ;; TODO: can pop-when be written in terms of interpolate-if
@@ -211,19 +219,70 @@
       (fn interval-render [])})))
 
 (defn timeout
-  "Call function f after period t if still mounted in the DOM."
+  "Call function f period t in milliseconds after being mounted in the DOM,
+  only if still mounted."
   [f t]
   (let [id (atom)]
     (reagent/create-class
-     {:display-name "interval"
+     {:display-name "timeout"
       :component-did-mount
-      (fn interval-did-mount [this]
+      (fn timeout-did-mount [this]
         (reset! id (js/setTimeout f t)))
       :component-will-unmount
-      (fn interval-will-unmount [this]
-        (js/clearInterval @id))
+      (fn timeout-will-unmount [this]
+        (js/clearTimeout @id))
       :reagent-render
-      (fn interval-render [])})))
+      (fn timeout-render [])})))
+
+(defn and-then
+  "Use timeline instead of this function directly.
+  Provides a way to express a sequence of actions and pauses.
+  Takes an id atom, element ratom,
+  and a sequence of numbers and/or callback functions and/or vectors.
+  Treats numbers as a wait timeout in milliseconds,
+  calls callbacks after the elapsed time.
+  id is reset as the timeout reference for cleanup.
+  element is reset to vectors for rendering. "
+  [id element x & more]
+  (cond
+    (number? x)
+    (when (seq more)
+      (reset! id (js/setTimeout (fn [] (apply and-then id element more)) x)))
+
+    (vector? x)
+    (do (reset! element x)
+        (when (seq more)
+          (apply and-then id element more)))
+
+    (and (ifn? x) (not (coll? x)) (not (map? x)))
+    (do (x)
+        (when (seq more)
+          (apply and-then id element more)))
+
+    :else
+    (apply and-then id element
+           [:div
+            (str "timeline encountered unexpected type " (type x))
+            [:p (pr-str x)]]
+           more)))
+
+(defn timeline
+  "Call multiple functions, with optional waits between them."
+  [x & xs]
+  (let [id (atom nil)
+        element (reagent/atom nil)]
+    (reagent/create-class
+     {:display-name "interval"
+      :component-did-mount
+      (fn timeout-did-mount [this]
+        (apply and-then id element x xs))
+      :component-will-unmount
+      (fn timeout-will-unmount [this]
+        (when @id
+          (js/clearTimeout @id)))
+      :reagent-render
+      (fn timeout-render []
+        @element)})))
 
 (defn get-scroll []
   (.-y (dom/getDocumentScroll)))

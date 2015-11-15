@@ -22,6 +22,9 @@ Existing animation libraries focus on manipulating DOM elements,
 which conflicts with the lifecycle that React imposes on them.
 Reanimated avoids this problem by making animation part of your UI definition.
 
+Reanimated is my opinionated claim that reaction closures are simpler
+and more expressive than React's existing animation capabilities.
+
 
 ## Examples
 
@@ -47,7 +50,7 @@ Animation atom which recalculates until it reaches a steady state.
 
 Pull requests are welcome.
 
-When working on src-examples:
+When working on src-examples navigate to dev.html:
 
     lein figwheel
     open http://localhost:3449/dev.html
