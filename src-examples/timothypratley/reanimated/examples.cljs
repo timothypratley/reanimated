@@ -152,7 +152,7 @@ which produces animated values from the previous size to the current size.
        [:svg [:circle {:r 20 :cx @cx :cy 50 :fill "green"}]]])))
 
 (defcard-rg spring-example2
-  [spring-example-component])
+  [spring-example2-component])
 
 (def interval-script
   ["`interval` is a component."
