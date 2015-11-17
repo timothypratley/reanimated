@@ -23,7 +23,7 @@
   "Wraps a component to animate creation and destruction"
   ([condition then] (pop-when condition then {}))
   ([condition then options]
-   (let [anim (reagent/atom {:from (not condition)})]
+   (let [anim (reagent/atom {:from condition})]
      (fn a-pop-when [condition then options]
        (when (not= condition (:from @anim))
          (reset! anim {:start (now)

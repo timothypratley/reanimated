@@ -26,8 +26,12 @@
   {:dev
    {:dependencies [[devcards "0.2.0-8"]]
     :plugins [[lein-cljsbuild "1.1.0"]
-              [lein-figwheel "0.4.0"]]
+              [lein-figwheel "0.4.0"]
+              [lein-codox "0.9.0"]]
     :resource-paths ["resources" "."]
+    :codox {:output-path "codox"
+            :language :clojurescript}
+
     :cljsbuild
     {:builds
      {:dev

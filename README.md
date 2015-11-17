@@ -1,6 +1,6 @@
 # Reanimated
 
-An animation library for Reagent (ClojureScript)
+Animate Reagent reactions (ClojureScript)
 
 <img src="https://timothypratley.github.io/reanimated/img/monster_zombie_hand-512.png"
  alt="Reanimated" title="Reanimated" align="right" />
@@ -8,14 +8,14 @@ An animation library for Reagent (ClojureScript)
 
 ## Overview
 
-You know how to write HTML.
-Reanimated allows you to express value transitions in your HTML.
-
 * Concise expressions.
 * Springs.
 * Reactive value interpolation.
 * Local time state, not part of your model.
 * Calculates only while animating.
+
+
+## The approach
 
 React style UIs have many advantages, but it is not always clear how to animate them.
 Existing animation libraries focus on manipulating DOM elements,
@@ -28,8 +28,11 @@ and more expressive than React's existing animation capabilities.
 
 ## Examples
 
-[Live demos](http://timothypratley.github.io/reanimated/#!/timothypratley.reanimated.examples)
-and [code.](https://github.com/timothypratley/reanimated/blob/master/src-examples/timothypratley/reanimated/examples.cljs)
+[Live demos and examples](http://timothypratley.github.io/reanimated/#!/timothypratley.reanimated.examples)
+and [examples code.](https://github.com/timothypratley/reanimated/blob/master/src-examples/timothypratley/reanimated/examples.cljs)
+
+## Documentation
+
 
 
 ## Setup

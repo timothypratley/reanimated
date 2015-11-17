@@ -102,6 +102,8 @@ which produces animated values from the previous size to the current size.
        [:svg [:circle {:r 50 :cx 50 :cy 50 :fill "green"}]]]]])
   (reagent/atom true))
 
+
+
 (defn interpolate-if-example []
   (let [selected? (reagent/atom false)
         radius (anim/interpolate-if selected? 40 20)]
