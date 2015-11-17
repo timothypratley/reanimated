@@ -31,15 +31,17 @@ and more expressive than React's existing animation capabilities.
 [Live demos and examples](http://timothypratley.github.io/reanimated/#!/timothypratley.reanimated.examples)
 and [examples code.](https://github.com/timothypratley/reanimated/blob/master/src-examples/timothypratley/reanimated/examples.cljs)
 
-## Documentation
-
-
 
 ## Setup
 
  Add to your project.clj file:
 
 [![Clojars Project](http://clojars.org/timothypratley/reanimated/latest-version.svg)](http://clojars.org/timothypratley/reanimated)
+
+
+## API Docs
+
+http://timothypratley.github.io/reanimated/codox/index.html
 
 
 ## How it works
