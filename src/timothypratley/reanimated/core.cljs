@@ -1,5 +1,10 @@
 (ns timothypratley.reanimated.core
-  "An animation library for Reagent (ClojureScript)."
+  "An animation library for Reagent (ClojureScript).
+  There is only one concept:
+  A reaction that moves toward some target,
+  each step triggers another update until it reaches the end state.
+  The trigger occurs by touching a local atom a zero timeout,
+  which changes the atom in the next Reagent render."
   (:require-macros
    [reagent.ratom :as ratom])
   (:require
@@ -8,10 +13,10 @@
    [goog.events.EventType :as EventType]
    [goog.dom :as dom]))
 
-(defn now []
+(defn ^:private now []
   (js/Date.))
 
-(defn interpolate
+(defn ^:private interpolate
   "Calculates a value between a and b relative to t in duration."
   [a b duration t]
   (cond
@@ -20,7 +25,10 @@
     :else (+ a (/ (* t (- b a)) duration))))
 
 (defn pop-when
-  "Wraps a component to animate creation and destruction"
+  "Wraps a component to animate creation and destruction.
+  Takes a condition ratom and a vector or value to be rendered.
+  Options can contain duration (milliseconds)
+  and easing (a function that takes a b duration t)."
   ([condition then] (pop-when condition then {}))
   ([condition then options]
    (let [anim (reagent/atom {:from condition})]
@@ -44,12 +52,17 @@
               then])
            (when condition then)))))))
 
-(defn toggle-handler [ratom]
+(defn toggle-handler
+  "Creates an event handler that will toggle a given ratom."
+  [ratom]
   (fn a-toggle-handler [e]
     (swap! ratom not)
     e))
 
-(defn mouse-watcher [ratom]
+(defn mouse-watcher
+  "Returns a map suitable for merging with component properties,
+  that will keep a given ratom updated with the mouseover status."
+  [ratom]
   {:on-mouse-over (fn timeline-mouse-over [e]
                     (reset! ratom true)
                     e)
@@ -61,7 +74,10 @@
 ;; TODO: can pop-when be written in terms of interpolate-if
 
 (defn interpolate-if
-  "Interpolates between two values when the conditon changes."
+  "Interpolates between two values when the conditon changes.
+  Takes a condition ratom to watch, and 2 vectors or values to render.
+  Options can contain duration (in milliseconds)
+  and easing (a function of a b duration t)."
   ([condition a b] (interpolate-if condition a b {}))
   ([condition a b options]
    (let [anim (reagent/atom {:from a})
@@ -84,7 +100,10 @@
           (if @condition b a)))))))
 
 (defn interpolate-to
-  "Interpolates toward new values."
+  "Interpolates toward new values.
+  Takes a ratom which stores a numeric value.
+  Options can contain duration (in milliseconds)
+  and easing (a function of a b duration t)."
   ([x] (interpolate-to x {}))
   ([x options]
    (let [anim (reagent/atom {:from @x
@@ -114,7 +133,10 @@
           b))))))
 
 (defn interpolate-arg
-  "Interpolates the argument of a component to x."
+  "Interpolates the argument of a component to x.
+  Will call the given component with values approaching x.
+  Options can contain duration (in milliseconds)
+  and easing (a function of a b duration t)."
   ([component x] (interpolate-arg component x {}))
   ([component x options]
    (let [anim (reagent/atom {:start 0 :to x :frame 0 :current x})]
@@ -136,34 +158,44 @@
 ;; TODO: why does passing options as second argument not work?
 ;; it would look more reagenty [pop-when {:duration 1000} condition then]
 
-(def mass 10)
-(def stiffness 1)
-(def damping 1)
+(def ^:private mass 10)
+(def ^:private stiffness 1)
+(def ^:private damping 1)
 
-(defn evaluate
-  [x2 dt x v a]
+(defn ^:private evaluate
+  "This is where the spring physics formula is applied."
+  [x2 dt x v a {:keys [mass stiffness damping]}]
   (let [x (+ x (* v dt))
         v (+ v (* a dt))
         f (- (* stiffness (- x2 x)) (* damping v))
         a (/ f mass)]
     [v a]))
 
-(defn integrate-rk4
-  [x2 dt x v]
+(defn ^:private integrate-rk4
+  "Takes an itegration step from numbers x to x2 over time dt,
+  with a present velocity v."
+  [x2 dt x v options]
   (let [dt2 (* dt 0.5)
-        [av aa] (evaluate x2 0.0 x v 0.0)
-        [bv ba] (evaluate x2 dt2 x av aa)
-        [cv ca] (evaluate x2 dt2 x bv ba)
-        [dv da] (evaluate x2 dt x cv ca)
+        [av aa] (evaluate x2 0.0 x v 0.0 options)
+        [bv ba] (evaluate x2 dt2 x av aa options)
+        [cv ca] (evaluate x2 dt2 x bv ba options)
+        [dv da] (evaluate x2 dt x cv ca options)
         dx (/ (+ av (* 2.0 (+ bv cv)) dv) 6.0)
         dv (/ (+ aa (* 2.0 (+ ba ca)) da) 6.0)]
     [(+ x (* dx dt)) (+ v (* dv dt))]))
 
-(defn small [x]
+(defn ^:private small [x]
   (< (js/Math.abs x) 0.1))
 
 (defn spring
-  "Interpolates the argument of a component to x."
+  "Useful for wrapping a value in your component to make it springy.
+  Returns a reaction that will take values approaching x2,
+  updating every time Reagent calls requestAnimationFrame.
+  Integrates a physical spring simulation for each step.
+  Options can contain:
+  from - a value to start from (initial value is used if absent).
+  velocity of the mass on the spring (initially 0 if absent).
+  mass, stiffness, damping of the spring."
   ([x2] (spring x2 {}))
   ([x2 options]
    (let [{:keys [from velocity]
@@ -181,8 +213,9 @@
             dt (min 1 (/ (- t2 t) 10.0))]
         (if (and (small (- x @x2)) (small v))
           @x2
-          (let [[x v] (integrate-rk4 @x2 dt x v)]
-            ;; TODO: limit timeouts to 1
+          (let [[x v] (integrate-rk4 @x2 dt x v {:mass mass
+                                                 :stiffness stiffness
+                                                 :damping damping})]
             (js/setTimeout #(reset! anim {:t t2
                                           :x x
                                           :v v}))
@@ -234,7 +267,7 @@
       :reagent-render
       (fn timeout-render [])})))
 
-(defn and-then
+(defn ^:private and-then
   "Use timeline instead of this function directly.
   Provides a way to express a sequence of actions and pauses.
   Takes an id atom, element ratom,
@@ -267,7 +300,10 @@
            more)))
 
 (defn timeline
-  "Call multiple functions, with optional waits between them."
+  "Given a sequence of inputs, will consume them depending on their type:
+  numbers will be a sleep in milliseconds
+  functions will be called with no arguments
+  vectors will be rendered as reagent components."
   [x & xs]
   (let [id (atom nil)
         element (reagent/atom nil)]
@@ -284,16 +320,22 @@
       (fn timeout-render []
         @element)})))
 
-(defn get-scroll []
+(defn get-scroll
+  "Gets the current document y scroll position."
+  []
   (.-y (dom/getDocumentScroll)))
 
-(def scroll (reagent/atom (get-scroll)))
+(def scroll
+  "A ratom for watching the current document y scroll,
+  will be updated when there is a scroll event."
+  (reagent/atom (get-scroll)))
 
 (events/listen
  js/window EventType/SCROLL
  (fn a-scroll [e]
    (reset! scroll (get-scroll))))
 
+;; TODO: still thinking about this
 #_(defn scroll
   []
   {:display-name "scroll"

@@ -1,6 +1,6 @@
 # Reanimated
 
-Animate Reagent reactions (ClojureScript)
+Reactive animation (ClojureScript Reagent library)
 
 <img src="https://timothypratley.github.io/reanimated/img/monster_zombie_hand-512.png"
  alt="Reanimated" title="Reanimated" align="right" />
@@ -8,16 +8,16 @@ Animate Reagent reactions (ClojureScript)
 
 ## Overview
 
-* Concise expressions.
-* Springs.
-* Reactive value interpolation.
+* Concise spring animation expressions.
 * Local time state, not part of your model.
 * Calculates only while animating.
+* This then that style timeline helper.
 
 
 ## The approach
 
-React style UIs have many advantages, but it is not always clear how to animate them.
+React style UIs have many advantages,
+but it is not always clear how to animate them.
 Existing animation libraries focus on manipulating DOM elements,
 which conflicts with the lifecycle that React imposes on them.
 Reanimated avoids this problem by making animation part of your UI definition.
@@ -28,8 +28,8 @@ and more expressive than React's existing animation capabilities.
 
 ## Examples
 
-[Live demos and examples](http://timothypratley.github.io/reanimated/#!/timothypratley.reanimated.examples)
-and [examples code.](https://github.com/timothypratley/reanimated/blob/master/src-examples/timothypratley/reanimated/examples.cljs)
+[Live demos](http://timothypratley.github.io/reanimated/#!/timothypratley.reanimated.examples)
+and [example code.](https://github.com/timothypratley/reanimated/blob/master/src-examples/timothypratley/reanimated/examples.cljs)
 
 
 ## Setup
@@ -42,6 +42,7 @@ and [examples code.](https://github.com/timothypratley/reanimated/blob/master/sr
 ## API Docs
 
 http://timothypratley.github.io/reanimated/codox/index.html
+See the examples above for usage.
 
 
 ## How it works

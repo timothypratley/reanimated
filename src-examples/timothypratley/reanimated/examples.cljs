@@ -1,9 +1,12 @@
 (ns ^:figwheel-always timothypratley.reanimated.examples
+  (:require-macros
+   [timothypratley.reanimated.examples :refer [example]])
   (:require
    [clojure.string :as string]
    [reagent.core :as reagent]
    [reagent.ratom :as ratom]
    [timothypratley.reanimated.core :as anim]
+   [timothypratley.reanimated.eg]
    [cljs.test :as t :include-macros true :refer-macros [testing is]]
    [devcards.core :as dc :refer-macros [defcard deftest defcard-rg]]))
 
@@ -40,36 +43,22 @@
    * Calculates only while animating."
   [logo-component])
 
-(defn spring-example-component []
-  (let [size (reagent/atom 100)
-        size-spring (anim/spring size)]
-    (fn a-spring-example-component []
-      [:img
-       {:width @size-spring
-        :src "img/golem2-512.png"
-        :on-click (fn golem-click [e]
-                    (swap! size + 10))}])))
-
-(defcard-rg spring-example
+(example spring
   "Springs follow the value of a Reagent atom, with a transition.
-```Clojure
-(defn spring-example-component []
+Wrapping `size` with `anim/spring` returns a reaction `size-spring`,
+which produces animated values from the previous size to the current size."
   (let [size (reagent/atom 100)
         size-spring (anim/spring size)]
     (fn a-spring-example-component []
-      [:img
-       {:width @size-spring
-        :src \"img/golem2-512.png\"
-        :on-click (fn [e]
-                    (swap! size + 10))}])))
-```
-Wrapping `size` with `anim/spring` returns a reaction `size-spring`,
-which produces animated values from the previous size to the current size.
+      [:p
+       {:on-click (fn golem-click [e] (swap! size + 10))}
+       [:img
+        {:width @size-spring
+         :src "img/golem2-512.png"}]
+       "Click me!"])))
 
-\"Click me!\""
-  [spring-example-component])
-
-(defn scroll-example-component []
+(example scroll
+  "`anim/scroll` is a convenience ratom of the current scroll-y"
   (let [scroll-i (anim/interpolate-to anim/scroll)]
     (fn []
       [:div
@@ -88,19 +77,17 @@ which produces animated values from the previous size to the current size.
                  :left "20%"
                  :width (+ 500.0 (/ @scroll-i 10.0))}}]])))
 
-(defcard-rg scroll-example
-  [scroll-example-component])
-
-(defcard-rg pop-when-example
-  (fn a-pop-when-example [show? _]
-    [:div
-     [:button {:on-click (anim/toggle-handler show?)} "Pop!"]
-     [anim/pop-when @show?
-      [:div
-       {:style {:background-color "yellow"}}
-       [:p "Here is a circle."]
-       [:svg [:circle {:r 50 :cx 50 :cy 50 :fill "green"}]]]]])
-  (reagent/atom true))
+(example pop-when
+         "Want to pop ui elements in and out?"
+         (let [show? (reagent/atom true)]
+           (fn a-pop-when-example []
+             [:div
+              [:button {:on-click (anim/toggle-handler show?)} "Pop!"]
+              [anim/pop-when @show?
+               [:div
+                {:style {:background-color "yellow"}}
+                [:p "Here is a circle."]
+                [:svg [:circle {:r 50 :cx 50 :cy 50 :fill "green"}]]]]])))
 
 
 

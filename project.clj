@@ -11,8 +11,8 @@
 
   :source-paths ["src"]
 
-  :clean-targets ^{:protect false} ["public/js/compiled"
-                                    "resources-dev/public/js/compiled"
+  :clean-targets ^{:protect false} ["js/compiled/out"
+                                    "js/compiled/out-dev"
                                     :target-path]
 
   :scm {:name "git"
@@ -24,12 +24,15 @@
 
   :profiles
   {:dev
-   {:dependencies [[devcards "0.2.0-8"]]
+   {:dependencies [[devcards "0.2.0-8"]
+                   ;;[org.clojure/tools.reader "1.0.0-alpha1"]
+                   ]
     :plugins [[lein-cljsbuild "1.1.0"]
               [lein-figwheel "0.4.0"]
               [lein-codox "0.9.0"]]
     :resource-paths ["resources" "."]
     :codox {:output-path "codox"
+            :source-paths ["src"]
             :language :clojurescript}
 
     :cljsbuild
