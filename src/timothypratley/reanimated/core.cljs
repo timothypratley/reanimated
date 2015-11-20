@@ -320,20 +320,40 @@
       (fn timeout-render []
         @element)})))
 
-(defn get-scroll
+(defn get-scroll-y
   "Gets the current document y scroll position."
   []
   (.-y (dom/getDocumentScroll)))
 
+(def get-scroll 
+  "Gets the current document y scroll position."
+  get-scroll-y)
+
+(defn get-scroll-x
+  "Gets the current document x scroll position."
+  []
+  (.-x (dom/getDocumentScroll)))
+
+(def scroll-y
+  "A ratom for watching the current document y scroll,
+  will be updated when there is a scroll event."
+  (reagent/atom (get-scroll-y)))
+
 (def scroll
   "A ratom for watching the current document y scroll,
   will be updated when there is a scroll event."
-  (reagent/atom (get-scroll)))
+  scroll-y)
+
+(def scroll-x
+  "A ratom for watching the current document x scroll,
+  will be updated when there is a scroll event."
+  (reagent/atom (get-scroll-x)))
 
 (events/listen
  js/window EventType/SCROLL
  (fn a-scroll [e]
-   (reset! scroll (get-scroll))))
+   (reset! scroll-y (get-scroll-y))
+   (reset! scroll-x (get-scroll-x))))
 
 ;; TODO: still thinking about this
 #_(defn scroll
