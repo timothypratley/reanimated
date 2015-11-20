@@ -1,4 +1,5 @@
 ## 0.1.4
+Added scroll-x and scroll-y ratoms (thank you @johnmn3).
 Documented functions and ran codox to produce API docs.
 Some helper functions have been made private to avoid distraction.
 

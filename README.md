@@ -68,6 +68,7 @@ To compile the website (keep figwheel running):
 
 Merge to gh-pages to release the website.
 
+`lein codox` to generate the API.
 `lein release` to release the library.
 
 
