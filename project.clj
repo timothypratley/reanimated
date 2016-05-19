@@ -20,8 +20,6 @@
 
   :deploy-repositories [["releases" :clojars]]
 
-  :signing {:gpg-key "0A7E8B95"}
-
   :profiles
   {:dev
    {:dependencies [[devcards "0.2.0-8"]]
