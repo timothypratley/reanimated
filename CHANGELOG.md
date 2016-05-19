@@ -1,3 +1,7 @@
+## 0.2.0
+Improved performance, moved to reagent 0.6.0-alpha2.
+Thanks Ben Yorke!
+
 ## 0.1.4
 Added scroll-x and scroll-y ratoms (thank you @johnmn3).
 Documented functions and ran codox to produce API docs.
