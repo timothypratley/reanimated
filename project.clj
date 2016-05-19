@@ -1,4 +1,4 @@
-(defproject timothypratley/reanimated "0.1.5"
+(defproject timothypratley/reanimated "0.2.0"
   :description "Reanimated is an animation library for Reagent (ClojureScript)."
   :url "http://github.com/timothypratley/reanimated"
   :license {:name "Eclipse Public License"
@@ -24,9 +24,7 @@
 
   :profiles
   {:dev
-   {:dependencies [[devcards "0.2.0-8"]
-                   ;;[org.clojure/tools.reader "1.0.0-alpha1"]
-                   ]
+   {:dependencies [[devcards "0.2.0-8"]]
     :plugins [[lein-cljsbuild "1.1.0"]
               [lein-figwheel "0.4.0"]
               [lein-codox "0.9.0"]]
