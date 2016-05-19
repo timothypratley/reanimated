@@ -6,7 +6,6 @@
    [reagent.core :as reagent]
    [reagent.ratom :as ratom]
    [timothypratley.reanimated.core :as anim]
-   [timothypratley.reanimated.eg]
    [cljs.test :as t :include-macros true :refer-macros [testing is]]
    [devcards.core :as dc :refer-macros [defcard deftest defcard-rg]]))
 

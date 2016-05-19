@@ -45,7 +45,7 @@
              scale (if condition scale (- 1 scale))]
          (if (< t duration)
            (do
-             (js/setTimeout #(swap! anim update :frame inc))
+             (reagent/next-tick #(swap! anim update :frame inc))
              [:div
               {:style {:transform (str "scale(" scale ")")
                        :opacity scale}}
@@ -95,7 +95,7 @@
             scale (if @condition scale (- 1 scale))]
         (if (< t duration)
           (do
-            (js/setTimeout #(swap! anim update :frame inc))
+            (reagent/next-tick #(swap! anim update :frame inc))
             (+ (* a (- 1 scale)) (* b scale)))
           (if @condition b a)))))))
 
@@ -126,9 +126,9 @@
             b @x]
         (if (< t duration)
           (let [at (+ (* a (- 1 scale)) (* b scale))]
-            (js/setTimeout #(swap! anim assoc
-                                   :at at
-                                   :frame (inc (:frame @anim))))
+            (reagent/next-tick #(swap! anim assoc
+                                           :at at
+                                           :frame (inc (:frame @anim))))
             at)
           b))))))
 
@@ -149,7 +149,7 @@
              t (->> @anim :start (- (now)))]
          (if (< t duration)
            (do
-             (js/setTimeout #(swap! anim update :frame inc))
+             (reagent/next-tick #(swap! anim update :frame inc))
              (let [i (easing (:from @anim) x duration t)]
                (swap! anim assoc :current i)
                [component i]))
@@ -185,7 +185,7 @@
     [(+ x (* dx dt)) (+ v (* dv dt))]))
 
 (defn ^:private small [x]
-  (< (js/Math.abs x) 0.1))
+  (< -0.1 x 0.1))
 
 (defn spring
   "Useful for wrapping a value in your component to make it springy.
@@ -216,9 +216,9 @@
           (let [[x v] (integrate-rk4 @x2 dt x v {:mass mass
                                                  :stiffness stiffness
                                                  :damping damping})]
-            (js/setTimeout #(reset! anim {:t t2
-                                          :x x
-                                          :v v}))
+            (reagent/next-tick #(reset! anim {:t t2
+                                              :x x
+                                              :v v}))
             x)))))))
 
 (defn watch
@@ -325,7 +325,7 @@
   []
   (.-y (dom/getDocumentScroll)))
 
-(def get-scroll 
+(def get-scroll
   "Gets the current document y scroll position."
   get-scroll-y)
 
