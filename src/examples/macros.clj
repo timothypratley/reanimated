@@ -1,8 +1,8 @@
-(ns timothypratley.reanimated.examples
+(ns examples.macros
   (:require
-   [devcards.core :refer [defcard-rg]]
+   [devcards.core :refer [defcard-rg]]))
    ;;[clojure.tools.reader :as reader]
-   ))
+
 
 (defmacro example [name desc form]
   (let [fname# (symbol (str name "-component"))]
@@ -33,7 +33,7 @@
               :default-value ~(with-out-str (clojure.pprint/pprint form))}]
             [:button
              #_{:on-click
-              #(reader/read-string "[1 2 3]")}
+                #(reader/read-string "[1 2 3]")}
              "go"]
             [:br]
             [~fname#]]))))

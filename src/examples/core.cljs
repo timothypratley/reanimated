@@ -1,11 +1,11 @@
-(ns ^:figwheel-always timothypratley.reanimated.examples
+(ns examples.core
   (:require-macros
-   [timothypratley.reanimated.examples :refer [example]])
+   [examples.macros :refer [example]])
   (:require
    [clojure.string :as string]
    [reagent.core :as reagent]
    [reagent.ratom :as ratom]
-   [timothypratley.reanimated.core :as anim]
+   [reanimated.core :as anim]
    [cljs.test :as t :include-macros true :refer-macros [testing is]]
    [devcards.core :as dc :refer-macros [defcard deftest defcard-rg]]))
 
@@ -54,15 +54,15 @@ which produces animated values from the previous size to the current size."
        [:img
         {:width @size-spring
          :src "img/golem2-512.png"}]
-       "Click me!"])))
+       "Click me!!"])))
 
 (example scroll
   "`anim/scroll` is a convenience ratom of the current scroll-y"
   (let [scroll-i (anim/interpolate-to anim/scroll)]
     (fn []
       [:div
-       {:style {:background (str "linear-gradient(rgb(" (- 255 (quot @scroll-i 10)) ",127,127), darkred)")
-                }}
+       {:style {:background (str "linear-gradient(rgb(" (- 255 (quot @scroll-i 10)) ",127,127), darkred)")}}
+
        [:img
         {:src "img/full-moon-icon-hi.png"
          :style {
@@ -114,21 +114,21 @@ which produces animated values from the previous size to the current size."
 (defcard-rg interpolate-arg-example
   [interpolate-arg-example-component])
 
-(defcard-rg integrate-rk4-plot
-  [:svg
-   [:path
-    {:stroke "blue"
-     :fill "none"
-     :d (str
-         "M0 0"
-         (string/join
-          " "
-          (->> [0 0]
-               (iterate (fn [[v a]] (anim/integrate-rk4 50 1 v a)))
-               (take 100)
-               (map first)
-               (map vector (range))
-               (map (fn [[t x]] (str "L" t " " x))))))}]])
+;; (defcard-rg integrate-rk4-plot
+;;   [:svg
+;;    [:path
+;;     {:stroke "blue"
+;;      :fill "none"
+;;      :d (str
+;;          "M0 0"
+;;          (string/join
+;;           " "
+;;           (->> [0 0]
+;;                (iterate (fn [[v a]] (anim/integrate-rk4 50 1 v a)))
+;;                (take 100)
+;;                (map first)
+;;                (map vector (range))
+;;                (map (fn [[t x]] (str "L" t " " x))))))}]])
 
 (defn spring-example2-component []
   (let [x (reagent/atom 150)
@@ -267,6 +267,5 @@ M30 20 L40 5"}]])))
 (defcard-rg react-to-value-example
   [react-to-value-example-component])
 
-(dc/start-devcard-ui!)
-
-(defn on-js-reload [])
+(defn on-jsload []
+  (dc/start-devcard-ui!))
