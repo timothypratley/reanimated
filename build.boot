@@ -35,7 +35,8 @@
 (def +target-dir+ "target")
 (def +public-dir+ "public")
 (def +codox-dir+ "codox")
-(def +version+ "0.2.0")
+(def +version+ "0.3.0-SNAPSHOT")
+(bootlaces! +version+)
 
 (task-options!
  target {:dir         #{+target-dir+}}
