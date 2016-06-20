@@ -1,4 +1,4 @@
-(ns timothypratley.reanimated.core
+(ns reanimated.core
   "An animation library for Reagent (ClojureScript).
   There is only one concept:
   A reaction that moves toward some target,
@@ -357,9 +357,9 @@
 
 ;; TODO: still thinking about this
 #_(defn scroll
-  []
-  {:display-name "scroll"
-   :component-did-mount
-   (fn scroll-did-mount [this]
-     (.getDomNode this))
-   })
+   []
+   {:display-name "scroll"
+    :component-did-mount
+    (fn scroll-did-mount [this]
+      (.getDomNode this))})
+

@@ -56,21 +56,36 @@ Animation atom which recalculates until it reaches a steady state.
 
 Pull requests are welcome.
 
-When working on src-examples navigate to dev.html:
+To see all available commands, run:
 
-    lein figwheel
-    open http://localhost:3449/dev.html
+    boot -h
 
-To compile the website (keep figwheel running):
+To start up a dev server, run:
 
-    lein cljsbuild once website
-    open http://localhost:3449
+    boot dev
+    open http://localhost:3550
 
-Merge to gh-pages to release the website.
+To run a production build of the site, run:
 
-`lein codox` to generate the API.
-`lein release` to release the library.
+    boot site # generates codox
+    open public/index.html
 
+To release a new production build of the site, run:
+
+    boot site # generates codox
+    git subtree push --prefix public origin gh-pages
+
+To refresh the docs without rebuilding the site, run:
+
+    boot docs
+
+To build the library, run:
+
+    boot lib
+
+To release a new version of the library, ensure you have the proper credentials, and run:
+
+    boot lib release
 
 ## License
 
