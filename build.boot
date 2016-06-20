@@ -27,6 +27,7 @@
          '[adzerk.bootlaces :refer [bootlaces!]]
          '[pandeiro.boot-http :refer [serve]]
          '[codox.boot :refer [codox]])
+(import java.io.File)
 
 (defn site-env! []
   (merge-env! :dependencies (get-env :site-dependencies)
@@ -37,6 +38,14 @@
 (def +codox-dir+ "codox")
 (def +version+ "0.3.0-SNAPSHOT")
 (bootlaces! +version+)
+
+(configure-repositories!
+ (fn [m]
+  (merge m (some (fn [[regex cred]] (if (re-find regex (:url m)) cred))
+            (gpg-decrypt
+             (clojure.java.io/file
+              (System/getProperty "user.home") ".lein/credentials.clj.gpg")
+             :as :edn)))))
 
 (task-options!
  target {:dir         #{+target-dir+}}
