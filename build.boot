@@ -33,12 +33,14 @@
   (merge-env! :dependencies (get-env :site-dependencies)
               :resource-paths #{"resources"}))
 
+
 (def +target-dir+ "target")
 (def +public-dir+ "public")
 (def +codox-dir+ "codox")
 (def +version+ "0.3.0-SNAPSHOT")
 (bootlaces! +version+)
 
+(set-env! :repositories [["clojars" {:url "https://clojars.org/repo/"}]])
 (configure-repositories!
  (fn [m]
   (merge m (some (fn [[regex cred]] (if (re-find regex (:url m)) cred))
