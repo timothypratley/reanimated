@@ -40,14 +40,9 @@
 (def +version+ "0.3.0-SNAPSHOT")
 (bootlaces! +version+)
 
-(set-env! :repositories [["clojars" {:url "https://clojars.org/repo/"}]])
-(configure-repositories!
- (fn [m]
-  (merge m (some (fn [[regex cred]] (if (re-find regex (:url m)) cred))
-            (gpg-decrypt
-             (clojure.java.io/file
-              (System/getProperty "user.home") ".lein/credentials.clj.gpg")
-             :as :edn)))))
+(set-env! :repositories [["clojars" {:url "https://clojars.org/repo/"
+                                     :username (System/getenv "CLOJARS_USER")
+                                     :password (System/getenv "CLOJARS_PASS")}]])
 
 (task-options!
  target {:dir         #{+target-dir+}}
