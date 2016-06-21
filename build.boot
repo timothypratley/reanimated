@@ -32,7 +32,7 @@
 (defn site-env! []
   (merge-env! :dependencies (get-env :site-dependencies)
               :resource-paths #{"resources"}))
-
+(set-env! :repositories [["clojars" {:url "https://clojars.org/repo/"}]])
 
 (def +target-dir+ "target")
 (def +public-dir+ "public")
@@ -40,9 +40,6 @@
 (def +version+ "0.3.0-SNAPSHOT")
 (bootlaces! +version+)
 
-(set-env! :repositories [["clojars" {:url "https://clojars.org/repo/"
-                                     :username (System/getenv "CLOJARS_USER")
-                                     :password (System/getenv "CLOJARS_PASS")}]])
 
 (task-options!
  target {:dir         #{+target-dir+}}
