@@ -1,3 +1,6 @@
+## 0.3.0
+Namespace rename from `timothypratley.reanimated` to shorter `reanimated`.
+
 ## 0.2.0
 Improved performance, moved to reagent 0.6.0-alpha2.
 Thanks Ben Yorke!
