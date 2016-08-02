@@ -99,4 +99,5 @@
 (deftask release []
   ;; Push keys need to be handled somehow
   ;; https://github.com/boot-clj/boot/wiki/Repository-Credentials-and-Deploying
+  (set-env! :repositories [["clojars" {:url "https://clojars.org/repo/"}]])
   (push))
