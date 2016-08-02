@@ -1,25 +1,24 @@
 (set-env!
- :resource-paths #{"src"}
  :dependencies
  '[;; Clojure
-   [org.clojure/clojure "1.8.0"]
-   [org.clojure/clojurescript "1.8.51"]
-   [org.clojure/core.async "0.2.374"]
+   [org.clojure/clojure "1.9.0-alpha10"]
+   [org.clojure/clojurescript "1.9.89"]
+   [org.clojure/core.async "0.2.385"]
    ;; Boot commands
    [boot-codox "0.9.5" :scope "test"]
    [pandeiro/boot-http "0.7.3" :scope "test"]
-   [adzerk/boot-reload "0.4.8" :scope "test"]
-   [adzerk/boot-cljs "1.7.48-5" :scope "test"]
+   [adzerk/boot-reload "0.4.12" :scope "test"]
+   [adzerk/boot-cljs "1.7.228-1" :scope "test"]
    [adzerk/bootlaces "0.1.13" :scope "test"]
-   [adzerk/boot-cljs-repl "0.3.0" :scope "test"]
+   [adzerk/boot-cljs-repl "0.3.3" :scope "test"]
    ;; boot-cljs-repl deps
    [com.cemerick/piggieback "0.2.1" :scope "test"]
    [weasel "0.7.0" :scope "test"]
    [org.clojure/tools.nrepl "0.2.12" :scope "test"]
    ;; Production Dependencies
-   [reagent "0.6.0-alpha2"]]
+   [reagent "0.6.0-rc"]]
  :site-dependencies
- '[[devcards "0.2.1-7"]])
+ '[[devcards "0.2.1-7" :exclusions [cljsjs/react cljsjs/react-dom]]])
 
 (require '[adzerk.boot-cljs :refer [cljs]]
          '[adzerk.boot-cljs-repl :refer [cljs-repl start-repl]]
@@ -32,7 +31,6 @@
 (defn site-env! []
   (merge-env! :dependencies (get-env :site-dependencies)
               :resource-paths #{"resources"}))
-(set-env! :repositories [["clojars" {:url "https://clojars.org/repo/"}]])
 
 (def +target-dir+ "target")
 (def +public-dir+ "public")
@@ -46,7 +44,7 @@
  serve  {:port        3550
          :dir         +target-dir+}
  push   {:repo        "clojars"}
- pom    {:project     'timothypratley/reanimated
+ pom    {:project     'reanimated
          :version     +version+
          :description "Reanimated is an animation library for Reagent (ClojureScript)."
          :url         "http://github.com/timothypratley/reanimated"
@@ -69,7 +67,8 @@
 (deftask dev
   "Start hot reload dev server."
   [p port VAL int "Port to serve files on"]
-  (if port (task-options! serve {:port port}))
+  (when port
+    (task-options! serve {:port port}))
   (site-env!)
   (comp (serve)
         (watch)

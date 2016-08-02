@@ -1,3 +1,6 @@
+## 0.4.0
+Package rename from `timothypratley/reanimated` to `reanimated`
+
 ## 0.3.0
 Namespace rename from `timothypratley.reanimated` to shorter `reanimated`.
 

@@ -66,10 +66,11 @@ which produces animated values from the previous size to the current size."
        [:img
         {:src "img/full-moon-icon-hi.png"
          :style {
-                 :width "100"
+                 :width "100px"
                  :position "absolute"
+                 ;; TODO: make these relative
                  :left (+ 500.0 (* 300.0 (js/Math.sin (+ (/ js/Math.PI 2.0) (/ @scroll-i 500.0)))))
-                 :top (+ 200.0 (* 200.0 (js/Math.cos (+ (/ js/Math.PI 2.0) (/ @scroll-i 500.0)))))}}]
+                 :top (+ 800.0 (* 200.0 (js/Math.cos (+ (/ js/Math.PI 2.0) (/ @scroll-i 500.0)))))}}]
        [:img
         {:src "img/house.png"
          :style {:position "relative"

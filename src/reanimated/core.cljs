@@ -184,8 +184,8 @@
         dv (/ (+ aa (* 2.0 (+ ba ca)) da) 6.0)]
     [(+ x (* dx dt)) (+ v (* dv dt))]))
 
-(defn ^:private small [x]
-  (< -0.1 x 0.1))
+(defn ^:private stop? [x threshold]
+  (<= (- threshold) x threshold))
 
 (defn spring
   "Useful for wrapping a value in your component to make it springy.
@@ -200,18 +200,25 @@
   ([x2 options]
    (let [{:keys [from velocity]
           :or {from @x2
-               velocity 0
-               mass 10
-               stiffness 1
-               damping 1}} options
+               velocity 0.0
+               mass 10.0
+               stiffness 1.0
+               damping 1.0}} options
+         last (atom from)
+         x2prev (atom @x2)
          anim (reagent/atom {:t (now)
                              :x from
                              :v velocity})]
      (ratom/reaction
+       (when (not= @x2 @x2prev)
+         (reset! last @x2prev)
+         (reset! x2prev @x2))
       (let [{:keys [x v t]} @anim
             t2 (now)
-            dt (min 1 (/ (- t2 t) 10.0))]
-        (if (and (small (- x @x2)) (small v))
+            dt (min 1 (/ (- t2 t) 10.0))
+            threshold (/ (js/Math.abs (- @last @x2)) 100.0)]
+        (if (and (stop? (- x @x2) threshold)
+                 (stop? v threshold))
           @x2
           (let [[x v] (integrate-rk4 @x2 dt x v {:mass mass
                                                  :stiffness stiffness

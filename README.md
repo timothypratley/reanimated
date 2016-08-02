@@ -36,7 +36,7 @@ and [example code.](https://github.com/timothypratley/reanimated/blob/master/src
 
  Add to your project.clj file:
 
-[![Clojars Project](http://clojars.org/timothypratley/reanimated/latest-version.svg)](http://clojars.org/timothypratley/reanimated)
+[![Clojars Project](http://clojars.org/reanimated/latest-version.svg)](http://clojars.org/reanimated)
 
 
 ## API Docs
@@ -89,6 +89,6 @@ To release a new version of the library, ensure you have the proper credentials,
 
 ## License
 
-Copyright © 2015 Timothy Pratley
+Copyright © 2016 Timothy Pratley
 
 Distributed under the Eclipse Public License either version 1.0 or (at your option) any later version.
