@@ -1,5 +1,6 @@
 ## 0.4.0
 Package rename from `timothypratley/reanimated` to `reanimated`
+Spring threshold is now a % of the travel distance (to support small unit scales).
 
 ## 0.3.0
 Namespace rename from `timothypratley.reanimated` to shorter `reanimated`.
