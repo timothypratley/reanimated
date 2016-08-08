@@ -1,13 +1,15 @@
 (ns examples.core
   (:require-macros
-   [examples.macros :refer [example]])
+    [examples.macros :refer [example]]
+    [cljs.test :refer [testing is]]
+    [devcards.core :refer [defcard deftest defcard-rg start-devcard-ui!]])
   (:require
-   [clojure.string :as string]
-   [reagent.core :as reagent]
-   [reagent.ratom :as ratom]
-   [reanimated.core :as anim]
-   [cljs.test :as t :include-macros true :refer-macros [testing is]]
-   [devcards.core :as dc :refer-macros [defcard deftest defcard-rg]]))
+    [examples.storyboard]
+    [reagent.core :as reagent]
+    [reagent.ratom :as ratom]
+    [reanimated.core :as anim]
+    [devcards.core]
+    [clojure.string :as string]))
 
 (enable-console-print!)
 
@@ -42,10 +44,11 @@
    * Calculates only while animating."
   [logo-component])
 
-(example spring
+(example spring-example
   "Springs follow the value of a Reagent atom, with a transition.
-Wrapping `size` with `anim/spring` returns a reaction `size-spring`,
-which produces animated values from the previous size to the current size."
+Here we let `size-spring` be a reaction that animates toward the current value held by `size`.
+So size-spring produces animated values from the previous size to the current size.
+Clicking the button increases `size` by 10, `spring-size` bounces toward the new value."
   (let [size (reagent/atom 100)
         size-spring (anim/spring size)]
     (fn a-spring-example-component []
@@ -56,7 +59,81 @@ which produces animated values from the previous size to the current size."
          :src "img/golem2-512.png"}]
        "Click me!!"])))
 
-(example scroll
+(defcard-rg integrate-rk4-plot
+  "A spring iterates a rk4 intergral of a mass on a spring with dampness and stiffness, which can be passed as options.
+That's a fancy way to say they are bouncy, and you can change their bounciness."
+  [:div
+   [:svg
+    [:text {:x 15 :y 15} "mass 10"]
+    [:path
+     {:stroke "blue"
+      :fill "none"
+      :d (str
+           "M 0 0"
+           (string/join
+             " "
+             (->> [0 0]
+                  (iterate (fn [[x v]]
+                             (anim/integrate-rk4 50 1 x v {:mass 10
+                                                           :stiffness 1
+                                                           :damping 1})))
+                  (take 100)
+                  (map first)
+                  (map vector (range))
+                  (map (fn [[t x]] (str "L" t " " x))))))}]]
+   [:svg
+    [:text {:x 15 :y 15} "mass 20"]
+    [:path
+     {:stroke "blue"
+      :fill "none"
+      :d (str
+           "M 0 0"
+           (string/join
+             " "
+             (->> [0 0]
+                  (iterate (fn [[x v]]
+                             (anim/integrate-rk4 50 1 x v {:mass 20
+                                                           :stiffness 1
+                                                           :damping 1})))
+                  (take 100)
+                  (map first)
+                  (map vector (range))
+                  (map (fn [[t x]] (str "L" t " " x))))))}]]])
+
+(example spring-example2
+  "Spring is the key feature of Reanimated, so here is another example of it."
+  (let [x (reagent/atom 150)
+        x-spring (anim/spring x)]
+    (fn a-spring-example2-component []
+      [:div
+       [:button {:on-click (fn [e] (swap! x - 50))} "<"]
+       [:button {:on-click (fn [e] (swap! x + 50))} ">"]
+       [:svg
+        [:circle {:r 20 :cx @x-spring :cy 50 :fill "green"}]]])))
+
+(example timeline-example
+  "A timeline can contain elements you want to show, times you want to wait, or functions you want to perform."
+  (let [mouse-over (reagent/atom false)]
+    (fn a-timeline-example []
+      [:div (anim/mouse-watcher mouse-over)
+       (if @mouse-over
+         [:div
+          [:strong "Playing timeline..."]
+          [anim/timeline
+           [:p "`timeline` is for this then that style animation."]
+           3000
+           [:p "`timeline` takes a mix of vectors, numbers and functions"]
+           3000
+           [:p "vectors are treated a reagent component to render"]
+           2000
+           [:p "numbers are treated as wait times in milliseconds"]
+           2000
+           [:p "functions are treated as callbacks"]
+           3000
+           #(reset! mouse-over false)]]
+         [:strong "Mouse over me!"])])))
+
+(example scroll-example
   "`anim/scroll` is a convenience ratom of the current scroll-y"
   (let [scroll-i (anim/interpolate-to anim/scroll)]
     (fn []
@@ -65,8 +142,7 @@ which produces animated values from the previous size to the current size."
 
        [:img
         {:src "img/full-moon-icon-hi.png"
-         :style {
-                 :width "100px"
+         :style {:width "100px"
                  :position "absolute"
                  ;; TODO: make these relative
                  :left (+ 500.0 (* 300.0 (js/Math.sin (+ (/ js/Math.PI 2.0) (/ @scroll-i 500.0)))))
@@ -77,21 +153,31 @@ which produces animated values from the previous size to the current size."
                  :left "20%"
                  :width (+ 500.0 (/ @scroll-i 10.0))}}]])))
 
+(example interpolate-to-example
+  "Sometimes you really don't want bounce. I get it. Don't worry, you can use `interpolate-to` instead.
+You can pass a custom interpolater if the linear one is too boring, and springs are too exciting."
+  (let [x (reagent/atom 150)
+        cx (anim/interpolate-to x)]
+    (fn a-spring-example2-component []
+      [:div
+       [:button {:on-click (fn [e] (swap! x - 50))} "<"]
+       [:button {:on-click (fn [e] (swap! x + 50))} ">"]
+       [:svg
+        [:circle {:r 20 :cx @cx :cy 50 :fill "green"}]]])))
+
 (example pop-when
-         "Want to pop ui elements in and out?"
-         (let [show? (reagent/atom true)]
-           (fn a-pop-when-example []
-             [:div
-              [:button {:on-click (anim/toggle-handler show?)} "Pop!"]
-              [anim/pop-when @show?
-               [:div
-                {:style {:background-color "yellow"}}
-                [:p "Here is a circle."]
-                [:svg [:circle {:r 50 :cx 50 :cy 50 :fill "green"}]]]]])))
+  "Want to pop ui elements in and out? Use `pop-when`.
+You could have used a scale spring instead though."
+  (let [show? (reagent/atom true)]
+    (fn a-pop-when-example []
+      [:div
+       [:button {:on-click (anim/toggle-handler show?)} "Pop!"]
+       [anim/pop-when @show?
+        [:center [:svg [:circle {:r 50 :cx 50 :cy 50 :fill "green"}]]]]])))
 
-
-
-(defn interpolate-if-example []
+(example interpolate-if-card
+  "`interpolate-if` moves between two values based on a flag.
+Not sure why you would want that, just use a spring instead."
   (let [selected? (reagent/atom false)
         radius (anim/interpolate-if selected? 40 20)]
     (fn an-interpolate-if-example []
@@ -99,49 +185,17 @@ which produces animated values from the previous size to the current size."
        [:button {:on-click (anim/toggle-handler selected?)} "Pop!"]
        [:svg [:circle {:r @radius :cx 40 :cy 40 :fill "blue"}]]])))
 
-(defcard-rg interpolate-if-card
-  [interpolate-if-example])
-
 (defn circle [radius]
   [:svg [:circle {:r radius :cx 40 :cy 40 :fill "red"}]])
 
-(defn interpolate-arg-example-component []
+(example interpolate-arg-example
+  "You can define a component that takes the target as an argument with `interpolate-arg`.
+Let me know if you ever use this instead of a spring, I can't imagine why you would want to."
   (let [selected? (reagent/atom false)]
     (fn an-interpolate-arg-example-component []
       [:div
        [:button {:on-click (anim/toggle-handler selected?)} "Pop!"]
        [anim/interpolate-arg circle (if @selected? 40 20)]])))
-
-(defcard-rg interpolate-arg-example
-  [interpolate-arg-example-component])
-
-;; (defcard-rg integrate-rk4-plot
-;;   [:svg
-;;    [:path
-;;     {:stroke "blue"
-;;      :fill "none"
-;;      :d (str
-;;          "M0 0"
-;;          (string/join
-;;           " "
-;;           (->> [0 0]
-;;                (iterate (fn [[v a]] (anim/integrate-rk4 50 1 v a)))
-;;                (take 100)
-;;                (map first)
-;;                (map vector (range))
-;;                (map (fn [[t x]] (str "L" t " " x))))))}]])
-
-(defn spring-example2-component []
-  (let [x (reagent/atom 150)
-        cx (anim/spring x)]
-    (fn a-spring-example2-component []
-      [:div
-       [:button {:on-click (fn [e] (swap! x - 50))} "<"]
-       [:button {:on-click (fn [e] (swap! x + 50))} ">"]
-       [:svg [:circle {:r 20 :cx @cx :cy 50 :fill "green"}]]])))
-
-(defcard-rg spring-example2
-  [spring-example2-component])
 
 (def interval-script
   ["`interval` is a component."
@@ -164,7 +218,9 @@ which produces animated values from the previous size to the current size."
   (concat [x] xs))
 
 ;; TODO: This would be more compelling as a scrolling text area
-(defn interval-example-component []
+(example interval-example
+  "You can also specify timeouts or intervals that do stuff as dom elements.
+I don't think you'll need it, use timeline instead."
   (let [lines (reagent/atom (cycle interval-script))
         mouse-over (reagent/atom false)]
     (fn an-interval-example-component []
@@ -176,37 +232,10 @@ which produces animated values from the previous size to the current size."
           [anim/interval #(swap! lines rest) 2000]])
        [:p (first @lines)]])))
 
-(defcard-rg interval-example
-  [interval-example-component])
-
 (deftest interpolate-test
   (is (= 1 (anim/interpolate 1 2 100 -10)))
   (is (= 2 (anim/interpolate 1 2 100 110)))
   (is (= 1.5 (anim/interpolate 1 2 100 50))))
-
-(defn timeline-component []
-  (let [mouse-over (reagent/atom false)]
-    (fn a-timeline-example []
-      [:div (anim/mouse-watcher mouse-over)
-       (if @mouse-over
-         [:div
-          [:strong "Playing timeline..."]
-          [anim/timeline
-           [:p "`timeline` is for this then that style animation."]
-           3000
-           [:p "`timeline` takes a mix of vectors, numbers and functions"]
-           3000
-           [:p "vectors are treated a reagent component to render"]
-           2000
-           [:p "numbers are treated as wait times in milliseconds"]
-           2000
-           [:p "functions are treated as callbacks"]
-           3000
-           #(reset! mouse-over false)]]
-         [:strong "Mouse over me!"])])))
-
-(defcard-rg timeline-example
-  [timeline-component])
 
 ;; TODO: make a convenient way to watch many things
 ;; perhaps a collection of keys or paths of interesting things
@@ -254,8 +283,8 @@ M30 20 L40 5"}]])))
 
 (defn react-to-value-example-component []
   (let [app-state (reagent/atom
-                   {:bikes (zipmap (repeatedly gensym)
-                                   (repeatedly 5 new-bike))})]
+                    {:bikes (zipmap (repeatedly gensym)
+                                    (repeatedly 5 new-bike))})]
     (fn a-react-to-value-example-component []
       [:svg
        {:width 560
@@ -269,4 +298,4 @@ M30 20 L40 5"}]])))
   [react-to-value-example-component])
 
 (defn on-jsload []
-  (dc/start-devcard-ui!))
+  (start-devcard-ui!))

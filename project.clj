@@ -1,6 +1,6 @@
 (defproject
   reanimated
-  "0.3.0"
+  "0.4.0"
   :comment
   "Generated from build.boot for Cursive"
   :dependencies
@@ -16,7 +16,10 @@
    [com.cemerick/piggieback "0.2.1" :scope "test"]
    [weasel "0.7.0" :scope "test"]
    [org.clojure/tools.nrepl "0.2.12" :scope "test"]
-   [reagent "0.6.0-rc"]]
+   [reagent "0.6.0-rc"]
+   [devcards "0.2.1-7" :exclusions [cljsjs/react-dom cljsjs/react]]
+   [data-frisk-reagent "0.2.5"]
+   [fipp "0.6.6"]]
   :repositories
   [["clojars" {:url "https://clojars.org/repo/"}]
    ["maven-central" {:url "https://repo1.maven.org/maven2"}]]

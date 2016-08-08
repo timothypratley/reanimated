@@ -1,17 +1,16 @@
 (ns examples.macros
   (:require
-   [devcards.core :refer [defcard-rg]]))
-   ;;[clojure.tools.reader :as reader]
-
+   [devcards.core :refer [defcard-rg]]
+   [fipp.clojure :refer [pprint]]))
 
 (defmacro example [name desc form]
   (let [fname# (symbol (str name "-component"))]
     `(do (defn ~fname# [] ~form)
-         (defcard-rg ~(symbol (str name "-example"))
+         (defcard-rg ~(symbol name)
            ~(str desc \newline \newline
                  "```Clojure" \newline
                  ;; TODO: pprint isn't perfect for code
-                 (with-out-str (clojure.pprint/pprint form)) \newline
+                 (with-out-str (pprint form)) \newline
                  "```")
            [~fname#]))))
 
@@ -24,7 +23,7 @@
            ~(str desc \newline \newline
                  "```Clojure" \newline
                  ;; TODO: pprint isn't perfect for code
-                 (with-out-str (clojure.pprint/pprint form)) \newline
+                 (with-out-str (pprint form)) \newline
                  "```")
            [:div
             [:p ~desc]

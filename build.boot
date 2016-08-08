@@ -16,9 +16,13 @@
    [weasel "0.7.0" :scope "test"]
    [org.clojure/tools.nrepl "0.2.12" :scope "test"]
    ;; Production Dependencies
-   [reagent "0.6.0-rc"]]
+   [reagent "0.6.0-rc"]
+   ;; Dev dependencies, kinda sorta
+   [devcards "0.2.1-7" :exclusions [cljsjs/react cljsjs/react-dom]]
+   [data-frisk-reagent "0.2.5"]
+   [fipp "0.6.6"]]
  :site-dependencies
- '[[devcards "0.2.1-7" :exclusions [cljsjs/react cljsjs/react-dom]]])
+ '[])
 
 (require '[adzerk.boot-cljs :refer [cljs]]
          '[adzerk.boot-cljs-repl :refer [cljs-repl start-repl]]

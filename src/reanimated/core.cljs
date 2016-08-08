@@ -282,7 +282,7 @@
   Treats numbers as a wait timeout in milliseconds,
   calls callbacks after the elapsed time.
   id is reset as the timeout reference for cleanup.
-  element is reset to vectors for rendering. "
+  element is reset to vectors for rendering."
   [id element x & more]
   (cond
     (number? x)
@@ -326,6 +326,18 @@
       :reagent-render
       (fn timeout-render []
         @element)})))
+
+(defn slow-reveal [t xs]
+  "Converts a vector into a timeline spaced by t.
+  [:div [:a] [:b]] -> [timeline [:div] t [:div [:a]] t [:div [:a] [:b]]]"
+  (let [[head more] (split-with (complement vector?) xs)
+        root (atom (vec head))]
+    (into
+      [timeline @root]
+      (apply
+        concat
+        (for [x more]
+          [t (swap! root conj x)])))))
 
 (defn get-scroll-y
   "Gets the current document y scroll position."
