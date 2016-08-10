@@ -29,7 +29,7 @@ and more expressive than React's existing animation capabilities.
 ## Examples
 
 [Live demos](http://timothypratley.github.io/reanimated/#!/timothypratley.reanimated.examples)
-and [example code.](https://github.com/timothypratley/reanimated/blob/master/src/reanimated/examples.cljs)
+and [example code.](https://github.com/timothypratley/reanimated/blob/master/src/reanimated/core.cljs)
 
 
 ## Setup
