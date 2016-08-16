@@ -18,13 +18,11 @@
    [org.clojure/tools.nrepl "0.2.12" :scope "test"]
    ;; Production Dependencies
    [reagent "0.6.0-rc" :exclusions [cljsjs/react]]
-   [cljsjs/react-with-addons "15.3.0-0"]
-   ;; Dev dependencies, kinda sorta
-   [devcards "0.2.1-7" :exclusions [cljsjs/react cljsjs/react-dom]]
-   [data-frisk-reagent "0.2.5"]
-   [fipp "0.6.6"]]
+   [cljsjs/react-with-addons "15.3.0-0"]]
  :site-dependencies
- '[])
+ '[[devcards "0.2.1-7" :exclusions [cljsjs/react cljsjs/react-dom]]
+   [data-frisk-reagent "0.2.5"]
+   [fipp "0.6.6"]])
 
 (require '[adzerk.boot-cljs :refer [cljs]]
          '[adzerk.boot-cljs-repl :refer [cljs-repl start-repl]]
@@ -41,7 +39,7 @@
 (def +target-dir+ "target")
 (def +public-dir+ "public")
 (def +codox-dir+ "codox")
-(def +version+ "0.4.0")
+(def +version+ "0.5.0")
 (bootlaces! +version+)
 
 
