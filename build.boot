@@ -49,7 +49,7 @@
          :dir         +target-dir+}
  push   {:repo        "clojars"
  ;; such a bunch of fail, my git says clean but my boot won't push
-         :ensure-clea false}
+         :ensure-clean false}
  pom    {:project     'reanimated
          :version     +version+
          :description "Reanimated is an animation library for Reagent (ClojureScript)."
