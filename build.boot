@@ -47,9 +47,7 @@
  target {:dir         #{+target-dir+}}
  serve  {:port        3550
          :dir         +target-dir+}
- push   {:repo        "clojars"
- ;; such a bunch of fail, my git says clean but my boot won't push
-         :ensure-clean false}
+ push   {:repo        "clojars"}
  pom    {:project     'reanimated
          :version     +version+
          :description "Reanimated is an animation library for Reagent (ClojureScript)."
