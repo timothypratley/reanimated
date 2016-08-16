@@ -1,2 +1,0 @@
-{:require  [reanimated.core examples.core]
- :init-fns [examples.core/on-jsload]}
