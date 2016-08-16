@@ -4,6 +4,8 @@
     [cljs.test :refer [testing is]]
     [devcards.core :refer [defcard deftest defcard-rg start-devcard-ui!]])
   (:require
+    [examples.scroll]
+    [examples.deprecated]
     [examples.storyboard]
     [reagent.core :as reagent]
     [reagent.ratom :as ratom]
@@ -133,26 +135,6 @@ That's a fancy way to say they are bouncy, and you can change their bounciness."
            #(reset! mouse-over false)]]
          [:strong "Mouse over me!"])])))
 
-(example scroll-example
-  "`anim/scroll` is a convenience ratom of the current scroll-y"
-  (let [scroll-i (anim/interpolate-to anim/scroll)]
-    (fn []
-      [:div
-       {:style {:background (str "linear-gradient(rgb(" (- 255 (quot @scroll-i 10)) ",127,127), darkred)")}}
-
-       [:img
-        {:src "img/full-moon-icon-hi.png"
-         :style {:width "100px"
-                 :position "absolute"
-                 ;; TODO: make these relative
-                 :left (+ 500.0 (* 300.0 (js/Math.sin (+ (/ js/Math.PI 2.0) (/ @scroll-i 500.0)))))
-                 :top (+ 800.0 (* 200.0 (js/Math.cos (+ (/ js/Math.PI 2.0) (/ @scroll-i 500.0)))))}}]
-       [:img
-        {:src "img/house.png"
-         :style {:position "relative"
-                 :left "20%"
-                 :width (+ 500.0 (/ @scroll-i 10.0))}}]])))
-
 (example interpolate-to-example
   "Sometimes you really don't want bounce. I get it. Don't worry, you can use `interpolate-to` instead.
 You can pass a custom interpolater if the linear one is too boring, and springs are too exciting."
@@ -165,37 +147,66 @@ You can pass a custom interpolater if the linear one is too boring, and springs 
        [:svg
         [:circle {:r 20 :cx @cx :cy 50 :fill "green"}]]])))
 
-(example pop-when
-  "Want to pop ui elements in and out? Use `pop-when`.
-You could have used a scale spring instead though."
-  (let [show? (reagent/atom true)]
-    (fn a-pop-when-example []
-      [:div
-       [:button {:on-click (anim/toggle-handler show?)} "Pop!"]
-       [anim/pop-when @show?
-        [:center [:svg [:circle {:r 50 :cx 50 :cy 50 :fill "green"}]]]]])))
+(example css-transition-group-carousel-example
+  "To make elements appear and disappear, use a css-transition-group.
+  I didn't implement these, they are part of ReactJS.
+  But I thought an example might help you decide if you want to use them.
+  https://facebook.github.io/react/docs/animation.html"
+  (let [pics ["img/full-moon-icon-hi.png"
+              "img/golem2-512.png"
+              "img/monster_zombie_hand-512.png"]
+        img-src (reagent/atom (cycle pics))]
+    (fn a-carousel []
+      [:div {:style {:height 300}}
+       [anim/css-transition-group
+        {:transition-name "carousel"
+         :transition-enter-timeout 500
+         :transition-leave-timeout 500}
+        [:img.carousel
+         {:key (first @img-src)
+          :src (first @img-src)
+          :width 300
+          :height 300}]]
+       [anim/interval #(swap! img-src next) 3000]
+       (comment You might want to put these styles in your CSS file)
+       [:style
+        "img.carousel { position: absolute; }"
+        ".carousel-enter { opacity: 0.01; }"
+        ".carousel-enter.carousel-enter-active { opacity: 1; transition: opacity 500ms ease-in; }"
+        ".carousel-leave { opacity: 1; }"
+        ".carousel-leave.carousel-leave-active { opacity: 0.01; transition: opacity 300ms ease-in; }"]])))
 
-(example interpolate-if-card
-  "`interpolate-if` moves between two values based on a flag.
-Not sure why you would want that, just use a spring instead."
-  (let [selected? (reagent/atom false)
-        radius (anim/interpolate-if selected? 40 20)]
-    (fn an-interpolate-if-example []
+(example css-transition-group-todo-example
+  "Note that you need elements to have a key so that React can keep track of what's going in and out."
+  (let [items (reagent/atom ["milk" "bread" "cheese"])]
+    (fn a-todo-list []
       [:div
-       [:button {:on-click (anim/toggle-handler selected?)} "Pop!"]
-       [:svg [:circle {:r @radius :cx 40 :cy 40 :fill "blue"}]]])))
-
-(defn circle [radius]
-  [:svg [:circle {:r radius :cx 40 :cy 40 :fill "red"}]])
-
-(example interpolate-arg-example
-  "You can define a component that takes the target as an argument with `interpolate-arg`.
-Let me know if you ever use this instead of a spring, I can't imagine why you would want to."
-  (let [selected? (reagent/atom false)]
-    (fn an-interpolate-arg-example-component []
-      [:div
-       [:button {:on-click (anim/toggle-handler selected?)} "Pop!"]
-       [anim/interpolate-arg circle (if @selected? 40 20)]])))
+       [:button {:on-click #(swap! items conj (str "more" (rand-int 1000)))} "add"]
+       [anim/css-transition-group
+        {:transition-name "todo"
+         :transition-enter-timeout 500
+         :transition-leave-timeout 500
+         :component "ul"
+         :class "todo-list"}
+        (doall
+          (map-indexed
+            (fn [idx item]
+              [:li
+               {:key idx}
+               item
+               [:button
+                {:style {:float "right"}
+                 :on-click
+                 (fn [e] (swap! items #(vec (concat (take idx %) (drop (inc idx) %)))))}
+                "x"]])
+            @items))]
+       (comment You might want to put these styles in your CSS file)
+       [:style
+        "ul.todo-list li { background-color: #44ee22; padding: 10px; margin: 1px; width: 80%; border-radius: 15px; list-style: none; }"
+        ".todo-enter { opacity: 0.01; }"
+        ".todo-enter.todo-enter-active { opacity: 1; transition: opacity 500ms ease-in; }"
+        ".todo-leave { opacity: 1; }"
+        ".todo-leave.todo-leave-active { opacity: 0.01; transition: opacity 300ms ease-in; }"]])))
 
 (def interval-script
   ["`interval` is a component."
@@ -298,4 +309,4 @@ M30 20 L40 5"}]])))
   [react-to-value-example-component])
 
 (defn on-jsload []
-  (start-devcard-ui!))
+  (start-devcard-ui! {:enable-key-nav true}))

@@ -1,4 +1,5 @@
 (set-env!
+ :resource-paths #{"src"}
  :dependencies
  '[;; Clojure
    [org.clojure/clojure "1.9.0-alpha10"]
@@ -16,7 +17,8 @@
    [weasel "0.7.0" :scope "test"]
    [org.clojure/tools.nrepl "0.2.12" :scope "test"]
    ;; Production Dependencies
-   [reagent "0.6.0-rc"]
+   [reagent "0.6.0-rc" :exclusions [cljsjs/react]]
+   [cljsjs/react-with-addons "15.3.0-0"]
    ;; Dev dependencies, kinda sorta
    [devcards "0.2.1-7" :exclusions [cljsjs/react cljsjs/react-dom]]
    [data-frisk-reagent "0.2.5"]

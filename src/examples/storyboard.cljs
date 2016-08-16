@@ -30,7 +30,7 @@
        {:view-box "-50 -50 100 100"
         :style {:border "solid 1px"}}
        [young-tim {:x @x-spring :y 0 :scale @scale-spring :blink @blink-to :eye-ball-pop @eye-ball-pop-spring :smile 2}]
-       [boss {:x (+ 100 (* 3 @x-spring)) :y -10 :scale @scale-spring} arm-spring]
+       [boss {:x (+ 100 (* 3 @x-spring)) :y -10 :scale @scale-spring :arm @arm-spring}]
        [anim/timeline
         1000
         [caption "I was coding away one day"]

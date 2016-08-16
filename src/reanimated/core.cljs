@@ -382,3 +382,10 @@
     (fn scroll-did-mount [this]
       (.getDomNode this))})
 
+(def css-transition-group
+  "Adapts CSSTransitionGroup https://facebook.github.io/react/docs/animation.html"
+  (reagent/adapt-react-class js/React.addons.CSSTransitionGroup))
+
+(def transition-group
+  "Adapts TransitionGroup https://facebook.github.io/react/docs/animation.html"
+  (reagent/adapt-react-class js/React.addons.TransitionGroup))

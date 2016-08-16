@@ -29,7 +29,7 @@
             [:p ~desc]
             [:textarea
              {:style {:width "100%"}
-              :default-value ~(with-out-str (clojure.pprint/pprint form))}]
+              :default-value ~(with-out-str (pprint form))}]
             [:button
              #_{:on-click
                 #(reader/read-string "[1 2 3]")}
