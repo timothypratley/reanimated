@@ -88,6 +88,7 @@
   (site-env!)
   (comp (cljs :optimizations    :advanced
               :compiler-options {:devcards true})
+        (sift :invert true :include #{#"main\.out"})
         (target :dir #{+public-dir+})
         (docs)))
 
