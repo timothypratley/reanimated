@@ -198,7 +198,7 @@
   mass, stiffness, damping of the spring."
   ([x2] (spring x2 {}))
   ([x2 options]
-   (let [{:keys [from velocity]
+   (let [{:keys [from velocity mass stiffness damping]
           :or {from @x2
                velocity 0.0
                mass 10.0
