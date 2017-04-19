@@ -1,3 +1,6 @@
+## 0.5.1
+Destructure mass, stiffness, damping from spring opts
+
 ## 0.5.0
 Included transition group examples
 

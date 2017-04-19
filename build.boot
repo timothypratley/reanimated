@@ -39,7 +39,7 @@
 (def +target-dir+ "target")
 (def +public-dir+ "public")
 (def +codox-dir+ "codox")
-(def +version+ "0.5.0")
+(def +version+ "0.5.1")
 (bootlaces! +version+)
 
 
@@ -47,7 +47,9 @@
  target {:dir         #{+target-dir+}}
  serve  {:port        3550
          :dir         +target-dir+}
- push   {:repo        "clojars"}
+ push   {:repo        "clojars"
+         ;;:ensure-clean false
+         }
  pom    {:project     'reanimated
          :version     +version+
          :description "Reanimated is an animation library for Reagent (ClojureScript)."
@@ -104,5 +106,7 @@
 (deftask release []
   ;; Push keys need to be handled somehow
   ;; https://github.com/boot-clj/boot/wiki/Repository-Credentials-and-Deploying
-  (set-env! :repositories [["clojars" {:url "https://clojars.org/repo/"}]])
+  (set-env! :repositories [["clojars" {:url "https://clojars.org/repo/"
+                                       :username (System/getenv "CLOJARS_USER")
+                                       :password (System/getenv "CLOJARS_PASS")}]])
   (push))
