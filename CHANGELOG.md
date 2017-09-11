@@ -1,3 +1,9 @@
+## 0.5.3
+Dependency version bumps
+
+## 0.5.2
+Fixes warning about atom with no arguments
+
 ## 0.5.1
 Destructure mass, stiffness, damping from spring opts
 
