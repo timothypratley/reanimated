@@ -246,7 +246,7 @@
 (defn interval
   "Call function f every period t while mounted in the DOM."
   [f t]
-  (let [id (atom)]
+  (let [id (atom nil)]
     (reagent/create-class
      {:display-name "interval"
       :component-did-mount
@@ -262,7 +262,7 @@
   "Call function f period t in milliseconds after being mounted in the DOM,
   only if still mounted."
   [f t]
-  (let [id (atom)]
+  (let [id (atom nil)]
     (reagent/create-class
      {:display-name "timeout"
       :component-did-mount
