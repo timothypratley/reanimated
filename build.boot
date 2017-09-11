@@ -103,6 +103,14 @@
    (jar)
    (target)))
 
+(configure-repositories!
+ (fn [m]
+   (merge m (some (fn [[regex cred]] (if (re-find regex (:url m)) cred))
+                  (gpg-decrypt
+                   (clojure.java.io/file
+                    (System/getProperty "user.home") ".lein/credentials.clj.gpg")
+                   :as :edn)))))
+
 (deftask release []
   ;; Push keys need to be handled somehow
   ;; https://github.com/boot-clj/boot/wiki/Repository-Credentials-and-Deploying
