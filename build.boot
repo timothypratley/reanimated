@@ -2,23 +2,23 @@
  :resource-paths #{"src"}
  :dependencies
  '[;; Clojure
-   [org.clojure/clojure "1.9.0-alpha10"]
-   [org.clojure/clojurescript "1.9.89"]
-   [org.clojure/core.async "0.2.385"]
+   [org.clojure/clojure "1.9.0-alpha20"]
+   [org.clojure/clojurescript "1.9.908"]
+   [org.clojure/core.async "0.3.443"]
    ;; Boot commands
-   [boot-codox "0.9.5" :scope "test"]
-   [pandeiro/boot-http "0.7.3" :scope "test"]
-   [adzerk/boot-reload "0.4.12" :scope "test"]
-   [adzerk/boot-cljs "1.7.228-1" :scope "test"]
+   [boot-codox "0.10.3" :scope "test"]
+   [pandeiro/boot-http "0.8.3" :scope "test"]
+   [adzerk/boot-reload "0.5.2" :scope "test"]
+   [adzerk/boot-cljs "2.1.3" :scope "test"]
    [adzerk/bootlaces "0.1.13" :scope "test"]
    [adzerk/boot-cljs-repl "0.3.3" :scope "test"]
    ;; boot-cljs-repl deps
-   [com.cemerick/piggieback "0.2.1" :scope "test"]
+   [com.cemerick/piggieback "0.2.2" :scope "test"]
    [weasel "0.7.0" :scope "test"]
-   [org.clojure/tools.nrepl "0.2.12" :scope "test"]
+   [org.clojure/tools.nrepl "0.2.13" :scope "test"]
    ;; Production Dependencies
-   [reagent "0.6.0-rc" :exclusions [cljsjs/react]]
-   [cljsjs/react-with-addons "15.3.0-0"]]
+   [reagent "0.7.0" :exclusions [cljsjs/react]]
+   [cljsjs/react-with-addons "15.6.1-0"]]
  :site-dependencies
  '[[devcards "0.2.1-7" :exclusions [cljsjs/react cljsjs/react-dom]]
    [data-frisk-reagent "0.2.5"]
