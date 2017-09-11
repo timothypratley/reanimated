@@ -39,7 +39,7 @@
 (def +target-dir+ "target")
 (def +public-dir+ "public")
 (def +codox-dir+ "codox")
-(def +version+ "0.5.1")
+(def +version+ "0.5.2")
 (bootlaces! +version+)
 
 
