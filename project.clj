@@ -16,9 +16,8 @@
    [com.cemerick/piggieback "0.2.1" :scope "test"]
    [weasel "0.7.0" :scope "test"]
    [org.clojure/tools.nrepl "0.2.12" :scope "test"]
-   [reagent "0.6.0-rc" :exclusions [cljsjs/react]]
-   [cljsjs/react-with-addons "15.3.0-0"]
-   [devcards "0.2.1-7" :exclusions [cljsjs/react-dom cljsjs/react]]
+   [reagent "0.6.0-rc"]
+   [devcards "0.2.1-7" [cljsjs/react-dom cljsjs/react]]
    [data-frisk-reagent "0.2.5"]
    [fipp "0.6.6"]]
   :repositories

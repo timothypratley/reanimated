@@ -17,8 +17,7 @@
    [weasel "0.7.0" :scope "test"]
    [org.clojure/tools.nrepl "0.2.13" :scope "test"]
    ;; Production Dependencies
-   [reagent "0.7.0" :exclusions [cljsjs/react]]
-   [cljsjs/react-with-addons "15.6.1-0"]]
+   [reagent "0.7.0"]]
  :site-dependencies
  '[[devcards "0.2.1-7" :exclusions [cljsjs/react cljsjs/react-dom]]
    [data-frisk-reagent "0.2.5"]
