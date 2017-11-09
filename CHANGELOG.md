@@ -1,3 +1,7 @@
+## 0.6.0
+Droped dependency to react-with-addons,
+breaking: removes css-transition-group and transition-group
+
 ## 0.5.3
 Dependency version bumps
 
