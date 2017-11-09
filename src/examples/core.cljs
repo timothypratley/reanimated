@@ -147,67 +147,6 @@ You can pass a custom interpolater if the linear one is too boring, and springs 
        [:svg
         [:circle {:r 20 :cx @cx :cy 50 :fill "green"}]]])))
 
-(example css-transition-group-carousel-example
-  "To make elements appear and disappear, use a css-transition-group.
-  I didn't implement these, they are part of ReactJS.
-  But I thought an example might help you decide if you want to use them.
-  https://facebook.github.io/react/docs/animation.html"
-  (let [pics ["img/full-moon-icon-hi.png"
-              "img/golem2-512.png"
-              "img/monster_zombie_hand-512.png"]
-        img-src (reagent/atom (cycle pics))]
-    (fn a-carousel []
-      [:div {:style {:height 300}}
-       [anim/css-transition-group
-        {:transition-name "carousel"
-         :transition-enter-timeout 500
-         :transition-leave-timeout 500}
-        [:img.carousel
-         {:key (first @img-src)
-          :src (first @img-src)
-          :width 300
-          :height 300}]]
-       [anim/interval #(swap! img-src next) 3000]
-       (comment You might want to put these styles in your CSS file)
-       [:style
-        "img.carousel { position: absolute; }"
-        ".carousel-enter { opacity: 0.01; }"
-        ".carousel-enter.carousel-enter-active { opacity: 1; transition: opacity 500ms ease-in; }"
-        ".carousel-leave { opacity: 1; }"
-        ".carousel-leave.carousel-leave-active { opacity: 0.01; transition: opacity 300ms ease-in; }"]])))
-
-(example css-transition-group-todo-example
-  "Note that you need elements to have a key so that React can keep track of what's going in and out."
-  (let [items (reagent/atom ["milk" "bread" "cheese"])]
-    (fn a-todo-list []
-      [:div
-       [:button {:on-click #(swap! items conj (str "more" (rand-int 1000)))} "add"]
-       [anim/css-transition-group
-        {:transition-name "todo"
-         :transition-enter-timeout 500
-         :transition-leave-timeout 500
-         :component "ul"
-         :class "todo-list"}
-        (doall
-          (map-indexed
-            (fn [idx item]
-              [:li
-               {:key idx}
-               item
-               [:button
-                {:style {:float "right"}
-                 :on-click
-                 (fn [e] (swap! items #(vec (concat (take idx %) (drop (inc idx) %)))))}
-                "x"]])
-            @items))]
-       (comment You might want to put these styles in your CSS file)
-       [:style
-        "ul.todo-list li { background-color: #44ee22; padding: 10px; margin: 1px; width: 80%; border-radius: 15px; list-style: none; }"
-        ".todo-enter { opacity: 0.01; }"
-        ".todo-enter.todo-enter-active { opacity: 1; transition: opacity 500ms ease-in; }"
-        ".todo-leave { opacity: 1; }"
-        ".todo-leave.todo-leave-active { opacity: 0.01; transition: opacity 300ms ease-in; }"]])))
-
 (def interval-script
   ["`interval` is a component."
    "When the component is mounted into the DOM,"
