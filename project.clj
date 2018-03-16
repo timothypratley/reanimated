@@ -4,9 +4,8 @@
   :comment
   "Generated from build.boot for Cursive"
   :dependencies
-  [[org.clojure/clojure "1.9.0-alpha10"]
+  [[org.clojure/clojure "1.9.0"]
    [org.clojure/clojurescript "1.9.89"]
-   [org.clojure/core.async "0.2.385"]
    [boot-codox "0.9.5" :scope "test"]
    [pandeiro/boot-http "0.7.3" :scope "test"]
    [adzerk/boot-reload "0.4.12" :scope "test"]

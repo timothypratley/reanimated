@@ -2,14 +2,13 @@
  :resource-paths #{"src"}
  :dependencies
  '[;; Clojure
-   [org.clojure/clojure "1.9.0-alpha20"]
+   [org.clojure/clojure "1.9.0"]
    [org.clojure/clojurescript "1.9.908"]
-   [org.clojure/core.async "0.3.443"]
    ;; Boot commands
    [boot-codox "0.10.3" :scope "test"]
    [pandeiro/boot-http "0.8.3" :scope "test"]
    [adzerk/boot-reload "0.5.2" :scope "test"]
-   [adzerk/boot-cljs "2.1.3" :scope "test"]
+   [adzerk/boot-cljs "2.1.4" :scope "test"]
    [adzerk/bootlaces "0.1.13" :scope "test"]
    [adzerk/boot-cljs-repl "0.3.3" :scope "test"]
    ;; boot-cljs-repl deps
@@ -38,7 +37,7 @@
 (def +target-dir+ "target")
 (def +public-dir+ "public")
 (def +codox-dir+ "codox")
-(def +version+ "0.6.0")
+(def +version+ "0.6.1")
 (bootlaces! +version+)
 
 

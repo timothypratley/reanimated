@@ -1,3 +1,7 @@
+## 0.6.1
+Dropped unused dependency on core.async
+Updated to use Clojure 1.9
+
 ## 0.6.0
 Droped dependency to react-with-addons,
 breaking: removes css-transition-group and transition-group
